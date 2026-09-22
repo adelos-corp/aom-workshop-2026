@@ -16,7 +16,6 @@ type Source = {
   name: string;
   description?: string;
   icon?: any;
-  attach?: boolean;
 };
 
 type Command = {
@@ -64,7 +63,6 @@ const ARROW_UP = [12, 4.5, 18.5, 11, 14.25, 11, 14.25, 19.5, 9.75, 19.5, 9.75, 1
 const SQUARE = [12, 6, 18, 6, 18, 12, 18, 18, 6, 18, 6, 12, 6, 6];
 const EASE_IN_OUT = [0.77, 0, 0.175, 1];
 const LINE = 22;
-const EDGE = 11;
 
 const mix = (a: number, b: number, t: number) => a + (b - a) * t;
 const pathAt = (a: number[], b: number[], t: number) => {
@@ -158,9 +156,7 @@ export default function PromptBar({
       ? sources.filter(item => item.name.toLowerCase().includes(query))
       : currentMenu === 'commands'
         ? commands.filter(item => item.name.replace(/^\//, '').toLowerCase().startsWith(query))
-        : currentMenu === 'model'
-          ? models
-          : [];
+        : [];
   const cursor = Math.min(active, Math.max(0, list.length - 1));
   const canSend = draft.trim().length > 0 || attachments.length > 0;
   const armed = busy || canSend;
@@ -248,19 +244,8 @@ export default function PromptBar({
   };
 
   const pick = (item: Source | Command | Model) => {
-    if (currentMenu === 'model') {
-      setOpen(null);
-      focusInput();
-      return;
-    }
     const head = token ? draft.slice(0, token.index + (token[1]?.length ?? 0)) : draft;
-    if ('attach' in item && item.attach) {
-      setDraft(head);
-      Promise.resolve(onAttach?.()).then(files => {
-        if (!files) return;
-        setAttachments(current => [...current, ...(Array.isArray(files) ? files : [files])]);
-      });
-    } else if (currentMenu === 'sources') {
+    if (currentMenu === 'sources') {
       setDraft(`${head}@${item.name} `);
     } else {
       setDraft(`${head}${item.name} `);
