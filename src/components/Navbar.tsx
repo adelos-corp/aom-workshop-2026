@@ -43,7 +43,8 @@ export default function Navbar() {
         saturation={1.2}
         style={{
           boxShadow: scrolled ? '0 2px 24px rgba(0,0,0,0.06)' : 'none',
-          transition: 'box-shadow 0.3s ease',
+          border: '1px solid rgba(255,255,255,0.65)',
+          transition: 'box-shadow 0.3s ease, border-color 0.3s ease',
         }}
       >
         <nav
