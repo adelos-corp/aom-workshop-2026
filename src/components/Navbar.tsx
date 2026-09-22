@@ -133,97 +133,78 @@ export default function Navbar() {
         maxWidth: '900px',
       }}
     >
-      <AnimatePresence mode="wait" initial={false}>
-        {!scrolled ? (
-          <motion.div
-            key="single"
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.22 }}
-            className="nav-single"
-          >
-            <GlassSurface
-              width="100%"
-              height="auto"
-              {...glassProps}
-              style={{
-                boxShadow: 'none',
-                border: '1px solid rgba(255,255,255,0.65)',
-              }}
-            >
-              <nav style={{
-                position: 'relative',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '12px 20px',
-                width: '100%',
-              }}>
-                <div style={{ position: 'absolute', left: '20px', display: 'flex', alignItems: 'center' }}>
-                  {logoContent}
-                </div>
-                {linksContent}
-                <div style={{ position: 'absolute', right: '20px', display: 'flex', alignItems: 'center' }}>
-                  {ctaContent}
-                  <button
-                    className="nav-hamburger"
-                    onClick={() => setMobileOpen(!mobileOpen)}
-                    aria-label="Toggle menu"
-                    style={{
-                      display: 'none',
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      padding: '4px',
-                      flexDirection: 'column',
-                      gap: '5px',
-                    }}
-                  >
-                    <span style={{ display: 'block', width: '20px', height: '1.5px', background: 'var(--text)' }} />
-                    <span style={{ display: 'block', width: '20px', height: '1.5px', background: 'var(--text)' }} />
-                    <span style={{ display: 'block', width: '20px', height: '1.5px', background: 'var(--text)' }} />
-                  </button>
-                </div>
-              </nav>
-            </GlassSurface>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="split"
-            initial={{ opacity: 0, scale: 0.96, y: -4 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className="nav-split"
+      <motion.div
+        className="nav-morph"
+        animate={{ gap: scrolled ? 10 : 0 }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr auto 1fr',
+          alignItems: 'center',
+          width: '100%',
+        }}
+      >
+        <motion.div
+          animate={{ x: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          style={{ justifySelf: 'start', minWidth: 0 }}
+        >
+          <GlassSurface
+            width="auto"
+            height="auto"
+            borderRadius={scrolled ? 50 : '50px 0 0 50px'}
+            {...glassProps}
             style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr auto 1fr',
-              alignItems: 'center',
-              width: '100%',
+              border: '1px solid rgba(255,255,255,0.65)',
+              borderRight: scrolled ? '1px solid rgba(255,255,255,0.65)' : '0',
+              boxShadow: scrolled ? '0 2px 24px rgba(0,0,0,0.06)' : 'none',
             }}
           >
-            <div style={{ justifySelf: 'start' }}>
-              <GlassSurface width="auto" height="auto" {...glassProps} style={{ border: '1px solid rgba(255,255,255,0.65)' }}>
-                {logoContent}
-              </GlassSurface>
-            </div>
+            {logoContent}
+          </GlassSurface>
+        </motion.div>
 
-            <div style={{ justifySelf: 'center' }}>
-              <GlassSurface width="auto" height="auto" {...glassProps} style={{ border: '1px solid rgba(255,255,255,0.65)' }}>
-                {linksContent}
-              </GlassSurface>
-            </div>
+        <motion.div
+          animate={{ x: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          style={{ justifySelf: 'center', minWidth: 0 }}
+        >
+          <GlassSurface
+            width="auto"
+            height="auto"
+            borderRadius={scrolled ? 50 : 0}
+            {...glassProps}
+            style={{
+              border: '1px solid rgba(255,255,255,0.65)',
+              borderLeft: scrolled ? '1px solid rgba(255,255,255,0.65)' : '0',
+              borderRight: scrolled ? '1px solid rgba(255,255,255,0.65)' : '0',
+              boxShadow: scrolled ? '0 2px 24px rgba(0,0,0,0.06)' : 'none',
+            }}
+          >
+            {linksContent}
+          </GlassSurface>
+        </motion.div>
 
-            <div style={{ justifySelf: 'end' }}>
-              <GlassSurface width="auto" height="auto" {...glassProps} style={{ border: '1px solid rgba(255,255,255,0.65)' }}>
-                {ctaContent}
-              </GlassSurface>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
+        <motion.div
+          animate={{ x: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          style={{ justifySelf: 'end', minWidth: 0 }}
+        >
+          <GlassSurface
+            width="auto"
+            height="auto"
+            borderRadius={scrolled ? 50 : '0 50px 50px 0'}
+            {...glassProps}
+            style={{
+              border: '1px solid rgba(255,255,255,0.65)',
+              borderLeft: scrolled ? '1px solid rgba(255,255,255,0.65)' : '0',
+              boxShadow: scrolled ? '0 2px 24px rgba(0,0,0,0.06)' : 'none',
+            }}
+          >
+            {ctaContent}
+          </GlassSurface>
+        </motion.div>
+      </motion.div>
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
