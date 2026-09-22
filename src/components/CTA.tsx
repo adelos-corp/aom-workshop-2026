@@ -6,11 +6,12 @@ import PromptBar from './PromptBar';
 export default function CTA() {
   const ref = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const filePickerResolver = useRef<((files: string[]) => void) | null>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
   const [hovered, setHovered] = useState(false);
   const [busy, setBusy] = useState(false);
   const [lastPrompt, setLastPrompt] = useState('');
-  const controller = useRef<AbortController | null>(null);\n  const filePickerResolver = useRef<((files: string[]) => void) | null>(null);
+  const controller = useRef<AbortController | null>(null);
 
   const send = async (text: string) => {
     setBusy(true);
@@ -32,14 +33,16 @@ export default function CTA() {
     }
   };
 
-  const pickFiles = () => {
+  const pickFiles = () => new Promise<string[]>(resolve => {
+    filePickerResolver.current = resolve;
     fileRef.current?.click();
-  };
+  });
 
   const onFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files ?? []).map(file => file.name);
     event.target.value = '';
-    return files;
+    filePickerResolver.current?.(files);
+    filePickerResolver.current = null;
   };
 
   return (
@@ -117,10 +120,7 @@ export default function CTA() {
               busy={busy}
               onSend={send}
               onStop={() => controller.current?.abort()}
-              onAttach={async () => {
-                pickFiles();
-                return undefined;
-              }}
+              onAttach={pickFiles}
               background="#27272a"
               color="#f5f5f5"
               menuBackground="#323236"
@@ -140,13 +140,7 @@ export default function CTA() {
               type="file"
               multiple
               hidden
-              onChange={event => {
-                const files = onFiles(event);
-                if (files.length) {
-                  // The prompt bar owns its visible chips. This picker is exposed for the workshop demo.
-                  window.dispatchEvent(new CustomEvent('aom-files-picked', { detail: files }));
-                }
-              }}
+              onChange={onFiles}
             />
 
             {lastPrompt ? (
