@@ -20,14 +20,13 @@ export default function Navbar() {
 
   return (
     <motion.header
-      initial={{ opacity: 0, y: -12 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, x: '-50%', y: -12 }}
+      animate={{ opacity: 1, x: '-50%', y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       style={{
         position: 'fixed',
         top: '16px',
         left: '50%',
-        transform: 'translateX(-50%)',
         zIndex: 100,
         width: 'calc(100% - 48px)',
         maxWidth: '900px',
