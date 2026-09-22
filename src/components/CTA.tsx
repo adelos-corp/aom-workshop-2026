@@ -88,9 +88,6 @@ export default function CTA() {
           >
             <PromptBar
               placeholder="Master the Art of Making"
-              models={[
-                { key: 'aom', name: 'AOM', tag: 'The Art of Making' },
-              ]}
               efforts={[
                 'Minimalist',
                 'Maximalist',
@@ -100,7 +97,6 @@ export default function CTA() {
                 'Cyberpunk',
                 'Experimental',
               ]}
-              defaultModel="aom"
               defaultEffort="Glassmorphic"
               busy={busy}
               onSend={send}
