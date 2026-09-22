@@ -1,27 +1,96 @@
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'motion/react';
 import PromptBar from './PromptBar';
+import GeneratedResult from './GeneratedResult';
+
+type GeneratedResultData = {
+  title: string;
+  understand: string;
+  plan: string[];
+  setup: {
+    commands: string[];
+  };
+  structure: {
+    path: string;
+    purpose: string;
+  }[];
+  build: {
+    path: string;
+    language: string;
+    content: string;
+  }[];
+  design: {
+    style: string;
+    intensity: number;
+    decisions: string[];
+  };
+  run: {
+    commands: string[];
+  };
+  walkthrough: {
+    step: number;
+    title: string;
+    explanation: string;
+  }[];
+  refine: string[];
+  deploy: {
+    commands: string[];
+    steps: string[];
+  };
+};
 
 export default function CTA() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
-  const [hovered, setHovered] = useState(false);
+
   const [busy, setBusy] = useState(false);
+  const [result, setResult] = useState<GeneratedResultData | null>(null);
+
   const controller = useRef<AbortController | null>(null);
 
-  const send = async (text: string) => {
+  const send = async (
+    text: string,
+    meta: {
+      attachments: unknown[];
+      effort: string;
+      intensity: number;
+      model?: string;
+    }
+  ) => {
+    if (!text.trim() || busy) return;
+
     setBusy(true);
+    setResult(null);
+
     controller.current = new AbortController();
+
     try {
-      await new Promise<void>((resolve, reject) => {
-        const timer = window.setTimeout(resolve, 650);
-        controller.current?.signal.addEventListener('abort', () => {
-          window.clearTimeout(timer);
-          reject(new DOMException('Aborted', 'AbortError'));
-        }, { once: true });
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          idea: text.trim(),
+          style: meta.effort,
+          intensity: meta.intensity,
+        }),
+        signal: controller.current.signal,
       });
-    } catch {
-      // Stopping a demo prompt is intentionally silent.
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Generation failed.');
+      }
+
+      setResult(data.result);
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return;
+      }
+
+      console.error('AOM generation error:', error);
     } finally {
       setBusy(false);
       controller.current = null;
@@ -43,7 +112,10 @@ export default function CTA() {
           ref={ref}
           initial={{ opacity: 0, y: 32 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          transition={{
+            duration: 0.9,
+            ease: [0.16, 1, 0.3, 1],
+          }}
         >
           <h2
             style={{
@@ -61,7 +133,11 @@ export default function CTA() {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            transition={{
+              duration: 0.8,
+              delay: 0.15,
+              ease: [0.16, 1, 0.3, 1],
+            }}
           >
             <p
               style={{
@@ -81,8 +157,17 @@ export default function CTA() {
           <motion.div
             initial={{ opacity: 0, y: 16, scale: 0.98 }}
             animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-            transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}
+            transition={{
+              duration: 0.8,
+              delay: 0.25,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '14px',
+            }}
           >
             <PromptBar
               placeholder="Master the Art of Making"
@@ -101,18 +186,14 @@ export default function CTA() {
               onStop={() => controller.current?.abort()}
               background="#ffffff"
               color="#111111"
-              menuBackground="#ffffff"
-              sparkColor="#8b7cf6"
               width={560}
-              radius={50}
+              radius={40}
               maxRows={5}
-              morphDuration={240}
-              squash={0.12}
-              tilt={8}
               pressScale={0.96}
             />
-          </motion.div>
 
+            {result && <GeneratedResult result={result} />}
+          </motion.div>
         </motion.div>
       </div>
     </section>

@@ -15,8 +15,15 @@ type PromptBarProps = {
   defaultEffort?: string;
   onEffortChange?: (effort: string) => void;
   busy?: boolean;
-  onSend?: (text: string, payload: { attachments: string[]; model?: Model; effort: string }) => void | Promise<void>;
-  onStop?: () => void;
+  onSend?: (
+    text: string,
+    payload: {
+      attachments: string[];
+      model?: Model;
+      effort: string;
+      intensity: number;
+  }
+) => void | Promise<void>;  onStop?: () => void;
   background?: string;
   color?: string;
   width?: number;
@@ -77,15 +84,22 @@ export default function PromptBar({
   }, [draft, maxRows]);
 
   const send = () => {
-    if (busy) {
-      onStop?.();
-      return;
-    }
-    if (!canSend) return;
-    onSend?.(draft.trim(), { attachments: [], effort: level });
-    setDraft('');
-    inputRef.current?.focus({ preventScroll: true });
-  };
+   if (busy) {
+     onStop?.();
+     return;
+   }
+ 
+   if (!canSend) return;
+ 
+   onSend?.(draft.trim(), {
+     attachments: [],
+     effort: level,
+     intensity: effortPercent,
+   });
+
+  setDraft('');
+  inputRef.current?.focus({ preventScroll: true });
+};
 
   const commitEffort = (percent: number) => {
     const next = Math.max(0, Math.min(100, percent));
