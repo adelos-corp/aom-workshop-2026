@@ -152,8 +152,8 @@ export default function Navbar() {
           <GlassSurface
             width="auto"
             height="auto"
-            borderRadius={scrolled ? 50 : '50px 0 0 50px'}
             {...glassProps}
+            borderRadius={scrolled ? 50 : '50px 0 0 50px'}
             style={{
               border: '1px solid rgba(255,255,255,0.65)',
               borderRight: scrolled ? '1px solid rgba(255,255,255,0.65)' : '0',
@@ -172,8 +172,8 @@ export default function Navbar() {
           <GlassSurface
             width="auto"
             height="auto"
-            borderRadius={scrolled ? 50 : 0}
             {...glassProps}
+            borderRadius={scrolled ? 50 : 0}
             style={{
               border: '1px solid rgba(255,255,255,0.65)',
               borderLeft: scrolled ? '1px solid rgba(255,255,255,0.65)' : '0',
@@ -193,8 +193,8 @@ export default function Navbar() {
           <GlassSurface
             width="auto"
             height="auto"
-            borderRadius={scrolled ? 50 : '0 50px 50px 0'}
             {...glassProps}
+            borderRadius={scrolled ? 50 : '0 50px 50px 0'}
             style={{
               border: '1px solid rgba(255,255,255,0.65)',
               borderLeft: scrolled ? '1px solid rgba(255,255,255,0.65)' : '0',
