@@ -226,6 +226,36 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
+      <div className="nav-mobile-single" style={{ display: 'none' }}>
+        <GlassSurface
+          width="100%"
+          height="auto"
+          {...glassProps}
+          style={{ border: '1px solid rgba(255,255,255,0.65)' }}
+        >
+          <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 20px', width: '100%' }}>
+            {logoContent}
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Toggle menu"
+              style={{
+                display: 'flex',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '4px',
+                flexDirection: 'column',
+                gap: '5px',
+              }}
+            >
+              <span style={{ display: 'block', width: '20px', height: '1.5px', background: 'var(--text)' }} />
+              <span style={{ display: 'block', width: '20px', height: '1.5px', background: 'var(--text)' }} />
+              <span style={{ display: 'block', width: '20px', height: '1.5px', background: 'var(--text)' }} />
+            </button>
+          </nav>
+        </GlassSurface>
+      </div>
+
       {/* Mobile drawer */}
       <AnimatePresence>
         {mobileOpen && (
@@ -278,6 +308,7 @@ export default function Navbar() {
           .nav-hamburger { display: flex !important; }
           .nav-split { display: none !important; }
           .nav-single { display: block !important; }
+          .nav-mobile-single { display: block !important; }
         }
       `}</style>
   );
