@@ -69,7 +69,7 @@ export default function Navbar() {
               <img
                 src="/adelos-logo.png"
                 alt="ADELOS Corp."
-                style={{ width: '30px', height: '30px', objectFit: 'contain', display: 'block', filter: 'brightness(0) contrast(1.5) drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000) drop-shadow(0 1px 0 #000) drop-shadow(0 -1px 0 #000)' }}
+                style={{ width: '30px', height: '30px', objectFit: 'contain', display: 'block', filter: 'brightness(0) contrast(1.25) drop-shadow(0.7px 0 0 #000) drop-shadow(-0.7px 0 0 #000) drop-shadow(0 0.7px 0 #000) drop-shadow(0 -0.7px 0 #000)' }}
               />
             </a>
             <a
