@@ -9,7 +9,17 @@ export default function Navbar() {
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 24);
     window.addEventListener('scroll', handler, { passive: true });
-    const glassProps = {
+    handler();
+    return () => window.removeEventListener('scroll', handler);
+  }, []);
+
+  const links = [
+    { label: 'Process', href: '#process' },
+    { label: 'Build', href: '#build' },
+    { label: 'Deploy', href: '#deploy' },
+  ];
+
+  const glassProps = {
     borderRadius: 50,
     backgroundOpacity: 0.08,
     blur: 16,
@@ -72,8 +82,8 @@ export default function Navbar() {
             transition: 'color 0.2s ease',
             letterSpacing: '0.01em',
           }}
-          onMouseEnter={(e) => ((e.target as HTMLElement).style.color = 'var(--text)')}
-          onMouseLeave={(e) => ((e.target as HTMLElement).style.color = 'var(--muted)')}
+          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--text)')}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--muted)')}
         >
           {l.label}
         </a>
@@ -97,12 +107,12 @@ export default function Navbar() {
         whiteSpace: 'nowrap',
       }}
       onMouseEnter={(e) => {
-        (e.target as HTMLElement).style.background = '#333';
-        (e.target as HTMLElement).style.transform = 'scale(1.02)';
+        e.currentTarget.style.background = '#333';
+        e.currentTarget.style.transform = 'scale(1.02)';
       }}
       onMouseLeave={(e) => {
-        (e.target as HTMLElement).style.background = 'var(--text)';
-        (e.target as HTMLElement).style.transform = 'scale(1)';
+        e.currentTarget.style.background = 'var(--text)';
+        e.currentTarget.style.transform = 'scale(1)';
       }}
     >
       Make something
@@ -142,16 +152,14 @@ export default function Navbar() {
                 border: '1px solid rgba(255,255,255,0.65)',
               }}
             >
-              <nav
-                style={{
-                  position: 'relative',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '12px 20px',
-                  width: '100%',
-                }}
-              >
+              <nav style={{
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '12px 20px',
+                width: '100%',
+              }}>
                 <div style={{ position: 'absolute', left: '20px', display: 'flex', alignItems: 'center' }}>
                   {logoContent}
                 </div>
@@ -196,67 +204,19 @@ export default function Navbar() {
               width: '100%',
             }}
           >
-            <GlassSurface
-              width="auto"
-              height="auto"
-              {...glassProps}
-              style={{ border: '1px solid rgba(255,255,255,0.65)' }}
-            >
+            <GlassSurface width="auto" height="auto" {...glassProps} style={{ border: '1px solid rgba(255,255,255,0.65)' }}>
               {logoContent}
             </GlassSurface>
-
-            <GlassSurface
-              width="auto"
-              height="auto"
-              {...glassProps}
-              style={{ border: '1px solid rgba(255,255,255,0.65)' }}
-            >
+            <GlassSurface width="auto" height="auto" {...glassProps} style={{ border: '1px solid rgba(255,255,255,0.65)' }}>
               {linksContent}
             </GlassSurface>
-
-            <GlassSurface
-              width="auto"
-              height="auto"
-              {...glassProps}
-              style={{ border: '1px solid rgba(255,255,255,0.65)' }}
-            >
+            <GlassSurface width="auto" height="auto" {...glassProps} style={{ border: '1px solid rgba(255,255,255,0.65)' }}>
               {ctaContent}
             </GlassSurface>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="nav-mobile-single" style={{ display: 'none' }}>
-        <GlassSurface
-          width="100%"
-          height="auto"
-          {...glassProps}
-          style={{ border: '1px solid rgba(255,255,255,0.65)' }}
-        >
-          <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 20px', width: '100%' }}>
-            {logoContent}
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Toggle menu"
-              style={{
-                display: 'flex',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '4px',
-                flexDirection: 'column',
-                gap: '5px',
-              }}
-            >
-              <span style={{ display: 'block', width: '20px', height: '1.5px', background: 'var(--text)' }} />
-              <span style={{ display: 'block', width: '20px', height: '1.5px', background: 'var(--text)' }} />
-              <span style={{ display: 'block', width: '20px', height: '1.5px', background: 'var(--text)' }} />
-            </button>
-          </nav>
-        </GlassSurface>
-      </div>
-
-      {/* Mobile drawer */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -307,9 +267,8 @@ export default function Navbar() {
           .nav-cta { display: none !important; }
           .nav-hamburger { display: flex !important; }
           .nav-split { display: none !important; }
-          .nav-single { display: block !important; }
-          .nav-mobile-single { display: block !important; }
         }
       `}</style>
+    </motion.header>
   );
 }
