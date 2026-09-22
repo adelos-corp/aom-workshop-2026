@@ -49,15 +49,16 @@ export default function Navbar() {
       >
         <nav
           style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr auto 1fr',
+            position: 'relative',
+            display: 'flex',
             alignItems: 'center',
+            justifyContent: 'center',
             padding: '12px 20px',
             width: '100%',
           }}
         >
           {/* Logo - Left Aligned */}
-          <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+          <div style={{ position: 'absolute', left: '20px', display: 'flex', justifyContent: 'flex-start' }}>
             <a
               href="#"
               style={{
@@ -98,7 +99,7 @@ export default function Navbar() {
           </div>
 
           {/* Right Action - Right Aligned */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '16px' }}>
+          <div style={{ position: 'absolute', right: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '16px' }}>
             <a
               href="#cta"
               className="nav-cta"
