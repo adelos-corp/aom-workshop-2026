@@ -1,12 +1,9 @@
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'motion/react';
-import { Attachment01Icon, Globe02Icon } from '@hugeicons/core-free-icons';
 import PromptBar from './PromptBar';
 
 export default function CTA() {
   const ref = useRef<HTMLDivElement>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
-  const filePickerResolver = useRef<((files: string[]) => void) | null>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
   const [hovered, setHovered] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -31,18 +28,6 @@ export default function CTA() {
       setBusy(false);
       controller.current = null;
     }
-  };
-
-  const pickFiles = () => new Promise<string[]>(resolve => {
-    filePickerResolver.current = resolve;
-    fileRef.current?.click();
-  });
-
-  const onFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files ?? []).map(file => file.name);
-    event.target.value = '';
-    filePickerResolver.current?.(files);
-    filePickerResolver.current = null;
   };
 
   return (
@@ -102,30 +87,28 @@ export default function CTA() {
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}
           >
             <PromptBar
-              placeholder="Describe what you want to make…"
-              sources={[
-                { key: 'files', name: 'Photos & files', description: 'Upload from this device', icon: Attachment01Icon, attach: true },
-                { key: 'web', name: 'Web search', description: 'Live results', icon: Globe02Icon },
-              ]}
-              commands={[
-                { key: 'summarize', name: '/summarize', description: 'Digest the thread so far' },
-              ]}
+              placeholder="Master the Art of Making"
               models={[
-                { key: 'nova-3', name: 'Nova 3', tag: 'Flagship' },
-                { key: 'nova-mini', name: 'Nova Mini', tag: 'Fast' },
+                { key: 'aom', name: 'AOM', tag: 'The Art of Making' },
               ]}
-              efforts={['Low', 'Medium', 'High', 'Extra', 'Max']}
-              defaultModel="nova-3"
-              defaultEffort="Medium"
+              efforts={[
+                'Minimalist',
+                'Maximalist',
+                'Brutalist',
+                'Glassmorphic',
+                'Neumorphic',
+                'Cyberpunk',
+                'Experimental',
+              ]}
+              defaultModel="aom"
+              defaultEffort="Glassmorphic"
               busy={busy}
               onSend={send}
               onStop={() => controller.current?.abort()}
-              onAttach={pickFiles}
-              background="#27272a"
-              color="#f5f5f5"
-              menuBackground="#323236"
-              sparkColor="#b39dff"
-              sparkBoost={1}
+              background="#ffffff"
+              color="#111111"
+              menuBackground="#ffffff"
+              sparkColor="#8b7cf6"
               width={560}
               radius={18}
               maxRows={5}
@@ -133,14 +116,6 @@ export default function CTA() {
               squash={0.12}
               tilt={8}
               pressScale={0.96}
-            />
-
-            <input
-              ref={fileRef}
-              type="file"
-              multiple
-              hidden
-              onChange={onFiles}
             />
 
             {lastPrompt ? (
