@@ -35,7 +35,7 @@ export default function Navbar() {
       <GlassSurface
         width="100%"
         height="auto"
-        borderRadius={14}
+        borderRadius={50}
         backgroundOpacity={scrolled ? 0.8 : 0.4}
         blur={16}
         brightness={95}
