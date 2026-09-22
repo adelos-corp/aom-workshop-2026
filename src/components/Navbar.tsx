@@ -197,22 +197,29 @@ export default function Navbar() {
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             className="nav-split"
             style={{
-              display: 'flex',
+              display: 'grid',
+              gridTemplateColumns: '1fr auto 1fr',
               alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px',
               width: '100%',
             }}
           >
-            <GlassSurface width="auto" height="auto" {...glassProps} style={{ border: '1px solid rgba(255,255,255,0.65)' }}>
-              {logoContent}
-            </GlassSurface>
-            <GlassSurface width="auto" height="auto" {...glassProps} style={{ border: '1px solid rgba(255,255,255,0.65)' }}>
-              {linksContent}
-            </GlassSurface>
-            <GlassSurface width="auto" height="auto" {...glassProps} style={{ border: '1px solid rgba(255,255,255,0.65)' }}>
-              {ctaContent}
-            </GlassSurface>
+            <div style={{ justifySelf: 'start' }}>
+              <GlassSurface width="auto" height="auto" {...glassProps} style={{ border: '1px solid rgba(255,255,255,0.65)' }}>
+                {logoContent}
+              </GlassSurface>
+            </div>
+
+            <div style={{ justifySelf: 'center' }}>
+              <GlassSurface width="auto" height="auto" {...glassProps} style={{ border: '1px solid rgba(255,255,255,0.65)' }}>
+                {linksContent}
+              </GlassSurface>
+            </div>
+
+            <div style={{ justifySelf: 'end' }}>
+              <GlassSurface width="auto" height="auto" {...glassProps} style={{ border: '1px solid rgba(255,255,255,0.65)' }}>
+                {ctaContent}
+              </GlassSurface>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
