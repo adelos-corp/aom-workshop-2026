@@ -7,7 +7,6 @@ export default function CTA() {
   const inView = useInView(ref, { once: true, margin: '-80px' });
   const [hovered, setHovered] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [lastPrompt, setLastPrompt] = useState('');
   const controller = useRef<AbortController | null>(null);
 
   const send = async (text: string) => {
@@ -21,7 +20,6 @@ export default function CTA() {
           reject(new DOMException('Aborted', 'AbortError'));
         }, { once: true });
       });
-      setLastPrompt(text);
     } catch {
       // Stopping a demo prompt is intentionally silent.
     } finally {
@@ -113,62 +111,8 @@ export default function CTA() {
               tilt={8}
               pressScale={0.96}
             />
-
-            {lastPrompt ? (
-              <motion.div
-                initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                style={{
-                  maxWidth: '560px',
-                  color: 'var(--muted)',
-                  fontSize: '12px',
-                  letterSpacing: '0.01em',
-                }}
-              >
-                Idea captured. Now build it.
-              </motion.div>
-            ) : null}
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.42, ease: [0.16, 1, 0.3, 1] }}
-            style={{ marginTop: '28px' }}
-          >
-            <motion.a
-              href="#build"
-              onMouseEnter={() => setHovered(true)}
-              onMouseLeave={() => setHovered(false)}
-              animate={{
-                scale: hovered ? 1.03 : 1,
-                backgroundColor: hovered ? 'var(--accent-hov)' : 'var(--accent)',
-              }}
-              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '16px 36px',
-                borderRadius: '100px',
-                background: 'var(--accent)',
-                color: '#fff',
-                fontSize: '15px',
-                fontWeight: 500,
-                letterSpacing: '-0.01em',
-                cursor: 'pointer',
-              }}
-            >
-              Start making
-              <motion.span
-                animate={{ x: hovered ? 4 : 0 }}
-                transition={{ duration: 0.2 }}
-                style={{ display: 'inline-block', fontSize: '17px' }}
-              >
-                →
-              </motion.span>
-            </motion.a>
-          </motion.div>
         </motion.div>
       </div>
     </section>
