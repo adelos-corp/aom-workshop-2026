@@ -10,7 +10,7 @@ export default function CTA() {
   const [hovered, setHovered] = useState(false);
   const [busy, setBusy] = useState(false);
   const [lastPrompt, setLastPrompt] = useState('');
-  const controller = useRef<AbortController | null>(null);
+  const controller = useRef<AbortController | null>(null);\n  const filePickerResolver = useRef<((files: string[]) => void) | null>(null);
 
   const send = async (text: string) => {
     setBusy(true);
