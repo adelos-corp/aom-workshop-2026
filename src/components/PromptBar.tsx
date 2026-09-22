@@ -6,10 +6,8 @@ import {
   Attachment01Icon,
   Cancel01Icon,
   File02Icon,
-  Globe02Icon,
   HelpCircleIcon,
   Mic01Icon,
-  PlusSignIcon,
   SparklesIcon,
   Tick02Icon,
 } from '@hugeicons/core-free-icons';
@@ -55,7 +53,6 @@ type PromptBarProps = {
   color?: string;
   menuBackground?: string;
   sparkColor?: string;
-  sparkBoost?: number;
   width?: number;
   radius?: number;
   maxRows?: number;
@@ -123,11 +120,10 @@ export default function PromptBar({
   onStop,
   onAttach,
   onDictate,
-  background = '#27272a',
-  color = '#f5f5f5',
-  menuBackground = '#323236',
-  sparkColor = '#b39dff',
-  sparkBoost = 1,
+  background = '#ffffff',
+  color = '#111111',
+  menuBackground = '#ffffff',
+  sparkColor = '#8b7cf6',
   width = 400,
   radius = 16,
   maxRows = 5,
@@ -143,7 +139,7 @@ export default function PromptBar({
   const sparkRef = useRef<HTMLCanvasElement>(null);
   const [draft, setDraft] = useState('');
   const [attachments, setAttachments] = useState<Attachment[]>([]);
-  const [modelKey, setModelKey] = useState(defaultModel || models[0]?.key || '');
+  const [modelKey] = useState(defaultModel || models[0]?.key || '');
   const [effortIndex, setEffortIndex] = useState(() => {
     const index = efforts.indexOf(defaultEffort);
     return index >= 0 ? index : Math.max(0, Math.floor((efforts.length - 1) / 2));
@@ -257,7 +253,6 @@ export default function PromptBar({
 
   const pick = (item: Source | Command | Model) => {
     if (currentMenu === 'model') {
-      setModelKey((item as Model).key);
       setOpen(null);
       focusInput();
       return;
@@ -317,37 +312,21 @@ export default function PromptBar({
 
   return (
     <div ref={rootRef} className={`prompt-bar${className ? ` ${className}` : ''}`} data-max={maxed ? '' : undefined} style={style}>
-      {currentMenu ? (
-        <div className="prompt-bar__menu" data-kind={currentMenu}>
-          {currentMenu === 'effort' ? (
-            <>
-              <div className="prompt-bar__effort-head">
-                <span className="prompt-bar__effort-title">Effort</span>
-                <span className="prompt-bar__effort-level">{level}</span>
-                <span className="prompt-bar__effort-help"><HugeiconsIcon icon={HelpCircleIcon} size={14} /></span>
-              </div>
-              <div className="prompt-bar__effort-ends"><span>Faster</span><span>Smarter</span></div>
-              <div className="prompt-bar__effort-track" role="slider" tabIndex={0} aria-valuemin={0} aria-valuemax={efforts.length - 1} aria-valuenow={effortIndex} onClick={event => {
-                const rect = event.currentTarget.getBoundingClientRect();
-                setEffort(Math.round(((event.clientX - rect.left - EDGE) / Math.max(1, rect.width - EDGE * 2)) * (efforts.length - 1)));
-              }}>
-                <span className="prompt-bar__effort-fill" style={{ width: `${efforts.length > 1 ? effortIndex / (efforts.length - 1) * 100 : 0}%` }} />
-                <span className="prompt-bar__effort-thumb" style={{ left: `${efforts.length > 1 ? effortIndex / (efforts.length - 1) * 100 : 0}%` }} />
-              </div>
-            </>
-          ) : (
-            <div className="prompt-bar__menu-list">
-              {list.map((item, index) => (
-                <button key={item.key} type="button" className="prompt-bar__row" data-active={index === cursor} onMouseDown={event => event.preventDefault()} onMouseEnter={() => setActive(index)} onClick={() => pick(item)}>
-                  {'icon' in item && item.icon ? <span className="prompt-bar__row-icon"><HugeiconsIcon icon={item.icon} size={15} /></span> : null}
-                  <span className="prompt-bar__row-name">{item.name}</span>
-                  {'description' in item && item.description ? <span className="prompt-bar__row-desc">{item.description}</span> : null}
-                  {currentMenu === 'model' ? <><span className="prompt-bar__row-tag">{(item as Model).tag}</span><span className="prompt-bar__row-check" data-on={(item as Model).key === model?.key ? '' : undefined}><HugeiconsIcon icon={Tick02Icon} size={13} /></span></> : null}
-                </button>
-              ))}
-              {list.length === 0 ? <div className="prompt-bar__empty">No matches</div> : null}
-            </div>
-          )}
+      {currentMenu === 'effort' ? (
+        <div className="prompt-bar__menu" data-kind="effort">
+          <div className="prompt-bar__effort-head">
+            <span className="prompt-bar__effort-title">Style</span>
+            <span className="prompt-bar__effort-level">{level}</span>
+            <span className="prompt-bar__effort-help"><HugeiconsIcon icon={HelpCircleIcon} size={14} /></span>
+          </div>
+          <div className="prompt-bar__effort-ends"><span>Minimal</span><span>Experimental</span></div>
+          <div className="prompt-bar__effort-track" role="slider" tabIndex={0} aria-valuemin={0} aria-valuemax={efforts.length - 1} aria-valuenow={effortIndex} onClick={event => {
+            const rect = event.currentTarget.getBoundingClientRect();
+            setEffort(Math.round(((event.clientX - rect.left - EDGE) / Math.max(1, rect.width - EDGE * 2)) * (efforts.length - 1)));
+          }}>
+            <span className="prompt-bar__effort-fill" style={{ width: `${efforts.length > 1 ? effortIndex / (efforts.length - 1) * 100 : 0}%` }} />
+            <span className="prompt-bar__effort-thumb" style={{ left: `${efforts.length > 1 ? effortIndex / (efforts.length - 1) * 100 : 0}%` }} />
+          </div>
         </div>
       ) : null}
 
@@ -386,23 +365,13 @@ export default function PromptBar({
         />
 
         <div className="prompt-bar__bar">
-          <button type="button" className="prompt-bar__tool" aria-label="Add files and sources" data-on={open === 'sources' ? '' : undefined} onMouseDown={event => event.preventDefault()} onClick={() => { setOpen(open === 'sources' ? null : 'sources'); setActive(0); focusInput(); }}>
-            <HugeiconsIcon icon={PlusSignIcon} size={16} />
-          </button>
-
-          {models.length > 0 ? (
-            <button type="button" className="prompt-bar__pick" aria-label="Choose model" data-on={open === 'model' ? '' : undefined} onMouseDown={event => event.preventDefault()} onClick={() => { setOpen(open === 'model' ? null : 'model'); setActive(Math.max(0, models.indexOf(model))); focusInput(); }}>
-              <span>{model?.name}</span><HugeiconsIcon icon={ArrowDown01Icon} size={12} />
-            </button>
-          ) : null}
+          <span className="prompt-bar__spacer" />
 
           {efforts.length > 0 ? (
-            <button type="button" className="prompt-bar__pick" aria-label="Choose effort" data-on={open === 'effort' ? '' : undefined} data-max={maxed ? '' : undefined} onMouseDown={event => event.preventDefault()} onClick={() => { setOpen(open === 'effort' ? null : 'effort'); focusInput(); }}>
+            <button type="button" className="prompt-bar__pick" aria-label="Choose style" data-on={open === 'effort' ? '' : undefined} data-max={maxed ? '' : undefined} onMouseDown={event => event.preventDefault()} onClick={() => { setOpen(open === 'effort' ? null : 'effort'); focusInput(); }}>
               <HugeiconsIcon icon={SparklesIcon} size={13} /><span>{level}</span>
             </button>
           ) : null}
-
-          <span className="prompt-bar__spacer" />
 
           {onDictate ? (
             <button type="button" className="prompt-bar__tool" aria-label={listening ? 'Stop dictation' : 'Dictate'} data-on={listening ? '' : undefined} onMouseDown={event => event.preventDefault()} onClick={() => {
