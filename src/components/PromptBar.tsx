@@ -130,13 +130,12 @@ export default function PromptBar({
   const reduce = useReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const sparkRef = useRef<HTMLCanvasElement>(null);
   const [draft, setDraft] = useState('');
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const [modelKey] = useState(defaultModel || models[0]?.key || '');
-  const [effortIndex, setEffortIndex] = useState(() => {
+  const [effortPercent, setEffortPercentState] = useState(() => {
     const index = efforts.indexOf(defaultEffort);
-    return index >= 0 ? index : Math.max(0, Math.floor((efforts.length - 1) / 2));
+    return index >= 0 && efforts.length ? ((index + 0.5) / efforts.length) * 100 : 50;
   });
   const [open, setOpen] = useState<'sources' | 'commands' | 'model' | 'effort' | null>(null);
   const [active, setActive] = useState(0);
@@ -145,8 +144,8 @@ export default function PromptBar({
   const typing = useRef({ energy: 0, strokes: 0 });
 
   const model = models.find(item => item.key === modelKey) ?? models[0];
+  const effortIndex = efforts.length ? Math.min(efforts.length - 1, Math.floor((effortPercent / 100) * efforts.length)) : 0;
   const level = efforts[effortIndex] ?? '';
-  const maxed = efforts.length > 1 && effortIndex === efforts.length - 1;
   const token = /(^|\s)([@/])([\w-]*)$/.exec(draft);
   const tokenKind = token ? (token[2] === '@' ? 'sources' : 'commands') : null;
   const query = token?.[3]?.toLowerCase() ?? '';
@@ -160,60 +159,6 @@ export default function PromptBar({
   const cursor = Math.min(active, Math.max(0, list.length - 1));
   const canSend = draft.trim().length > 0 || attachments.length > 0;
   const armed = busy || canSend;
-
-  useEffect(() => {
-    if (!maxed || reduce || !sparkRef.current) return undefined;
-    const canvas = sparkRef.current;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return undefined;
-    let raf = 0;
-    let last = performance.now();
-    const particles: { x: number; y: number; life: number; span: number; vy: number; r: number; phase: number }[] = [];
-    const resize = () => {
-      const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(2, window.devicePixelRatio || 1);
-      canvas.width = Math.round(rect.width * dpr);
-      canvas.height = Math.round(rect.height * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-    const spawn = () => {
-      const rect = canvas.getBoundingClientRect();
-      particles.push({ x: Math.random() * rect.width, y: rect.height + 3, life: 0, span: 2.2 + Math.random() * 2, vy: -(7 + Math.random() * 9), r: 1 + Math.random(), phase: Math.random() * Math.PI * 2 });
-    };
-    const tick = (now: number) => {
-      const dt = Math.min(0.05, (now - last) / 1000);
-      last = now;
-      if (particles.length < 26) spawn();
-      const rect = canvas.getBoundingClientRect();
-      ctx.clearRect(0, 0, rect.width, rect.height);
-      ctx.fillStyle = sparkColor;
-      ctx.shadowColor = sparkColor;
-      ctx.shadowBlur = 8;
-      for (let i = particles.length - 1; i >= 0; i -= 1) {
-        const p = particles[i];
-        p.life += dt;
-        p.y += p.vy * dt;
-        if (p.life > p.span || p.y < -5) {
-          particles.splice(i, 1);
-          continue;
-        }
-        const k = p.life / p.span;
-        ctx.globalAlpha = Math.sin(k * Math.PI) * 0.8;
-        ctx.beginPath();
-        ctx.arc(p.x + Math.sin(now / 900 + p.phase) * 5, p.y, p.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      raf = requestAnimationFrame(tick);
-    };
-    resize();
-    const observer = new ResizeObserver(resize);
-    observer.observe(canvas);
-    raf = requestAnimationFrame(tick);
-    return () => {
-      cancelAnimationFrame(raf);
-      observer.disconnect();
-    };
-  }, [maxed, reduce, sparkColor]);
 
   useEffect(() => {
     const onPointerDown = (event: PointerEvent) => {
@@ -275,10 +220,16 @@ export default function PromptBar({
     }
   };
 
-  const setEffort = (index: number) => {
-    const next = Math.max(0, Math.min(efforts.length - 1, index));
-    setEffortIndex(next);
-    onEffortChange?.(efforts[next]);
+  const setEffortPercent = (percent: number) => {
+    const next = Math.max(0, Math.min(100, percent));
+    setEffortPercentState(next);
+    const nextIndex = efforts.length ? Math.min(efforts.length - 1, Math.floor((next / 100) * efforts.length)) : 0;
+    onEffortChange?.(efforts[nextIndex]);
+  };
+
+  const updateEffortFromPointer = (event: React.PointerEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    setEffortPercent(((event.clientX - rect.left) / rect.width) * 100);
   };
 
   const style = {
@@ -292,7 +243,7 @@ export default function PromptBar({
   } as React.CSSProperties;
 
   return (
-    <div ref={rootRef} className={`prompt-bar${className ? ` ${className}` : ''}`} data-max={maxed ? '' : undefined} style={style}>
+    <div ref={rootRef} className={`prompt-bar${className ? ` ${className}` : ''}`} style={style}>
       {currentMenu === 'effort' ? (
         <div className="prompt-bar__menu" data-kind="effort">
           <div className="prompt-bar__effort-head">
@@ -301,19 +252,29 @@ export default function PromptBar({
             <span className="prompt-bar__effort-help"><HugeiconsIcon icon={HelpCircleIcon} size={14} /></span>
           </div>
           <div className="prompt-bar__effort-ends"><span>Minimal</span><span>Experimental</span></div>
-          <div className="prompt-bar__effort-track" role="slider" tabIndex={0} aria-valuemin={0} aria-valuemax={efforts.length - 1} aria-valuenow={effortIndex} onClick={event => {
-            const rect = event.currentTarget.getBoundingClientRect();
-            const percent = Math.max(0, Math.min(100, ((event.clientX - rect.left) / rect.width) * 100));
-            setEffort(Math.min(efforts.length - 1, Math.floor(percent / 100 * efforts.length)));
+          <div className="prompt-bar__effort-track" role="slider" tabIndex={0} aria-valuemin={0} aria-valuemax={efforts.length - 1} aria-valuenow={effortPercent} onPointerDown={event => {
+            event.currentTarget.setPointerCapture(event.pointerId);
+            updateEffortFromPointer(event);
+          }}
+          onPointerMove={event => {
+            if (event.currentTarget.hasPointerCapture(event.pointerId)) updateEffortFromPointer(event);
+          }}
+          onKeyDown={event => {
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
+              event.preventDefault();
+              setEffortPercent(effortPercent - 1);
+            } else if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
+              event.preventDefault();
+              setEffortPercent(effortPercent + 1);
+            }
           }}>
-            <span className="prompt-bar__effort-fill" style={{ width: `${efforts.length ? ((effortIndex + 1) / efforts.length) * 100 : 0}%` }} />
-            <span className="prompt-bar__effort-thumb" style={{ left: `${efforts.length ? ((effortIndex + 0.5) / efforts.length) * 100 : 0}%` }} />
+            <span className="prompt-bar__effort-fill" style={{ width: `${effortPercent}%` }} />
+            <span className="prompt-bar__effort-thumb" style={{ left: `${effortPercent}%` }} />
           </div>
         </div>
       ) : null}
 
       <div className="prompt-bar__field" onClick={focusInput}>
-        <canvas ref={sparkRef} className="prompt-bar__sparks" aria-hidden="true" />
         {attachments.length > 0 ? (
           <div className="prompt-bar__chips">
             {attachments.map((file, index) => (
@@ -350,7 +311,7 @@ export default function PromptBar({
           <span className="prompt-bar__spacer" />
 
           {efforts.length > 0 ? (
-            <button type="button" className="prompt-bar__pick" aria-label="Choose style" data-on={open === 'effort' ? '' : undefined} data-max={maxed ? '' : undefined} onMouseDown={event => event.preventDefault()} onClick={() => { setOpen(open === 'effort' ? null : 'effort'); focusInput(); }}>
+            <button type="button" className="prompt-bar__pick" aria-label="Choose style" data-on={open === 'effort' ? '' : undefined} onMouseDown={event => event.preventDefault()} onClick={() => { setOpen(open === 'effort' ? null : 'effort'); focusInput(); }}>
               <HugeiconsIcon icon={SparklesIcon} size={13} /><span>{level}</span>
             </button>
           ) : null}
