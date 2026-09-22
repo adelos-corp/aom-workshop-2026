@@ -36,7 +36,7 @@ export default function Navbar() {
         width="100%"
         height="auto"
         borderRadius={50}
-        backgroundOpacity={scrolled ? 0.8 : 0.4}
+        backgroundOpacity={scrolled ? 0.12 : 0.06}
         blur={16}
         brightness={95}
         opacity={0.9}
