@@ -122,7 +122,7 @@ const GlassSurface = ({
     ...style,
     width: typeof width === 'number' ? `${width}px` : width,
     height: typeof height === 'number' ? `${height}px` : height,
-    borderRadius: `${borderRadius}px`,
+    borderRadius: typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius,
     '--glass-frost': backgroundOpacity,
     '--glass-saturation': saturation,
     '--filter-id': `url(#${filterId})`
