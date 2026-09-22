@@ -59,11 +59,19 @@ export default function Navbar() {
         >
           {/* Logo - Left Aligned */}
           <div style={{ position: 'absolute', left: '20px', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '8px' }}>
-            <img
-              src="/adelos-logo.png"
-              alt="ADELOS Corp."
-              style={{ width: '22px', height: '22px', objectFit: 'contain', display: 'block' }}
-            />
+            <a
+              href="https://adeloscorp.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="ADELOS Corp."
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+              <img
+                src="/adelos-logo.png"
+                alt="ADELOS Corp."
+                style={{ width: '28px', height: '28px', objectFit: 'contain', display: 'block', filter: 'brightness(0) contrast(1.35)' }}
+              />
+            </a>
             <a
               href="#"
               style={{
