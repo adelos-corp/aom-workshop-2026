@@ -110,7 +110,7 @@ export default function CTA() {
               menuBackground="#ffffff"
               sparkColor="#8b7cf6"
               width={560}
-              radius={18}
+              radius={50}
               maxRows={5}
               morphDuration={240}
               squash={0.12}
