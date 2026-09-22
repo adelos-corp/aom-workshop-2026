@@ -252,7 +252,7 @@ export default function PromptBar({
             <span className="prompt-bar__effort-help"><HugeiconsIcon icon={HelpCircleIcon} size={14} /></span>
           </div>
           <div className="prompt-bar__effort-ends"><span>Minimal</span><span>Experimental</span></div>
-          <div className="prompt-bar__effort-track" role="slider" tabIndex={0} aria-valuemin={0} aria-valuemax={efforts.length - 1} aria-valuenow={effortPercent} onPointerDown={event => {
+          <div className="prompt-bar__effort-track" role="slider" tabIndex={0} aria-valuemin={0} aria-valuemax={100} aria-valuenow={effortPercent} onPointerDown={event => {
             event.currentTarget.setPointerCapture(event.pointerId);
             updateEffortFromPointer(event);
           }}
