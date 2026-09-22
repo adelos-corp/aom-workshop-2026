@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { ChevronsUp } from 'lucide-react';
-import { useReducedMotion } from 'motion/react';
 import './PromptBar.css';
 
 type Model = {
@@ -51,7 +50,6 @@ export default function PromptBar({
   pressScale = 0.96,
   className = '',
 }: PromptBarProps) {
-  const reduce = useReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const rafRef = useRef<number | null>(null);

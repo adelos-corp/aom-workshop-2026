@@ -51,11 +51,15 @@ export default function CTA() {
   const send = async (
     text: string,
     meta: {
-      attachments: unknown[];
-      effort: string;
-      intensity: number;
-      model?: string;
-    }
+  attachments: string[];
+  effort: string;
+  intensity: number;
+  model?: {
+    key: string;
+    name: string;
+    tag?: string;
+  };
+}
   ) => {
     if (!text.trim() || busy) return;
 
