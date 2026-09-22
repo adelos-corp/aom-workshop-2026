@@ -9,14 +9,105 @@ export default function Navbar() {
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 24);
     window.addEventListener('scroll', handler, { passive: true });
-    return () => window.removeEventListener('scroll', handler);
-  }, []);
+    const glassProps = {
+    borderRadius: 50,
+    backgroundOpacity: 0.08,
+    blur: 16,
+    brightness: 95,
+    opacity: 0.9,
+    saturation: 1.2,
+  };
 
-  const links = [
-    { label: 'Process', href: '#process' },
-    { label: 'Build', href: '#build' },
-    { label: 'Deploy', href: '#deploy' },
-  ];
+  const logoContent = (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0 4px' }}>
+      <a
+        href="https://adeloscorp.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="ADELOS Corp."
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      >
+        <img
+          src="/adelos-logo.png"
+          alt="ADELOS Corp."
+          style={{
+            width: '30px',
+            height: '30px',
+            objectFit: 'contain',
+            display: 'block',
+            filter: 'brightness(0) contrast(1.25) drop-shadow(0.7px 0 0 #000) drop-shadow(-0.7px 0 0 #000) drop-shadow(0 0.7px 0 #000) drop-shadow(0 -0.7px 0 #000)'
+          }}
+        />
+      </a>
+      <a
+        href="#"
+        style={{
+          fontSize: '13px',
+          fontWeight: 600,
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          color: 'var(--text)',
+        }}
+      >
+        The Art of Making
+      </a>
+    </div>
+  );
+
+  const linksContent = (
+    <div className="nav-menu" style={{
+      display: 'flex',
+      gap: '32px',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '0 8px',
+    }}>
+      {links.map((l) => (
+        <a
+          key={l.label}
+          href={l.href}
+          style={{
+            fontSize: '13px',
+            color: 'var(--muted)',
+            transition: 'color 0.2s ease',
+            letterSpacing: '0.01em',
+          }}
+          onMouseEnter={(e) => ((e.target as HTMLElement).style.color = 'var(--text)')}
+          onMouseLeave={(e) => ((e.target as HTMLElement).style.color = 'var(--muted)')}
+        >
+          {l.label}
+        </a>
+      ))}
+    </div>
+  );
+
+  const ctaContent = (
+    <a
+      href="#cta"
+      className="nav-cta"
+      style={{
+        fontSize: '13px',
+        fontWeight: 500,
+        padding: '7px 16px',
+        borderRadius: '8px',
+        background: 'var(--text)',
+        color: 'var(--bg)',
+        transition: 'background 0.2s ease, transform 0.2s ease',
+        display: 'inline-block',
+        whiteSpace: 'nowrap',
+      }}
+      onMouseEnter={(e) => {
+        (e.target as HTMLElement).style.background = '#333';
+        (e.target as HTMLElement).style.transform = 'scale(1.02)';
+      }}
+      onMouseLeave={(e) => {
+        (e.target as HTMLElement).style.background = 'var(--text)';
+        (e.target as HTMLElement).style.transform = 'scale(1)';
+      }}
+    >
+      Make something
+    </a>
+  );
 
   return (
     <motion.header
@@ -32,134 +123,108 @@ export default function Navbar() {
         maxWidth: '900px',
       }}
     >
-      <GlassSurface
-        width="100%"
-        height="auto"
-        borderRadius={50}
-        backgroundOpacity={scrolled ? 0.12 : 0.06}
-        blur={16}
-        brightness={95}
-        opacity={0.9}
-        saturation={1.2}
-        style={{
-          boxShadow: scrolled ? '0 2px 24px rgba(0,0,0,0.06)' : 'none',
-          border: '1px solid rgba(255,255,255,0.65)',
-          transition: 'box-shadow 0.3s ease, border-color 0.3s ease',
-        }}
-      >
-        <nav
-          style={{
-            position: 'relative',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '12px 20px',
-            width: '100%',
-          }}
-        >
-          {/* Logo - Left Aligned */}
-          <div style={{ position: 'absolute', left: '20px', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '8px' }}>
-            <a
-              href="https://adeloscorp.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="ADELOS Corp."
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            >
-              <img
-                src="/adelos-logo.png"
-                alt="ADELOS Corp."
-                style={{ width: '30px', height: '30px', objectFit: 'contain', display: 'block', filter: 'brightness(0) contrast(1.25) drop-shadow(0.7px 0 0 #000) drop-shadow(-0.7px 0 0 #000) drop-shadow(0 0.7px 0 #000) drop-shadow(0 -0.7px 0 #000)' }}
-              />
-            </a>
-            <a
-              href="#"
+      <AnimatePresence mode="wait" initial={false}>
+        {!scrolled ? (
+          <motion.div
+            key="single"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.22 }}
+            className="nav-single"
+          >
+            <GlassSurface
+              width="100%"
+              height="auto"
+              {...glassProps}
               style={{
-                fontSize: '13px',
-                fontWeight: 600,
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: 'var(--text)',
+                boxShadow: 'none',
+                border: '1px solid rgba(255,255,255,0.65)',
               }}
             >
-              The Art of Making
-            </a>
-          </div>
-
-          {/* Desktop links - Center Aligned */}
-          <div className="nav-menu" style={{ 
-            display: 'flex', 
-            gap: '32px', 
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            {links.map((l) => (
-              <a
-                key={l.label}
-                href={l.href}
+              <nav
                 style={{
-                  fontSize: '13px',
-                  color: 'var(--muted)',
-                  transition: 'color 0.2s ease',
-                  letterSpacing: '0.01em',
+                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '12px 20px',
+                  width: '100%',
                 }}
-                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = 'var(--text)')}
-                onMouseLeave={(e) => ((e.target as HTMLElement).style.color = 'var(--muted)')}
               >
-                {l.label}
-              </a>
-            ))}
-          </div>
-
-          {/* Right Action - Right Aligned */}
-          <div style={{ position: 'absolute', right: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '16px' }}>
-            <a
-              href="#cta"
-              className="nav-cta"
-              style={{
-                fontSize: '13px',
-                fontWeight: 500,
-                padding: '7px 16px',
-                borderRadius: '8px',
-                background: 'var(--text)',
-                color: 'var(--bg)',
-                transition: 'background 0.2s ease, transform 0.2s ease',
-                display: 'inline-block',
-              }}
-              onMouseEnter={(e) => {
-                (e.target as HTMLElement).style.background = '#333';
-                (e.target as HTMLElement).style.transform = 'scale(1.02)';
-              }}
-              onMouseLeave={(e) => {
-                (e.target as HTMLElement).style.background = 'var(--text)';
-                (e.target as HTMLElement).style.transform = 'scale(1)';
-              }}
+                <div style={{ position: 'absolute', left: '20px', display: 'flex', alignItems: 'center' }}>
+                  {logoContent}
+                </div>
+                {linksContent}
+                <div style={{ position: 'absolute', right: '20px', display: 'flex', alignItems: 'center' }}>
+                  {ctaContent}
+                  <button
+                    className="nav-hamburger"
+                    onClick={() => setMobileOpen(!mobileOpen)}
+                    aria-label="Toggle menu"
+                    style={{
+                      display: 'none',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: '4px',
+                      flexDirection: 'column',
+                      gap: '5px',
+                    }}
+                  >
+                    <span style={{ display: 'block', width: '20px', height: '1.5px', background: 'var(--text)' }} />
+                    <span style={{ display: 'block', width: '20px', height: '1.5px', background: 'var(--text)' }} />
+                    <span style={{ display: 'block', width: '20px', height: '1.5px', background: 'var(--text)' }} />
+                  </button>
+                </div>
+              </nav>
+            </GlassSurface>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="split"
+            initial={{ opacity: 0, scale: 0.96, y: -4 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            className="nav-split"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+              width: '100%',
+            }}
+          >
+            <GlassSurface
+              width="auto"
+              height="auto"
+              {...glassProps}
+              style={{ border: '1px solid rgba(255,255,255,0.65)' }}
             >
-              Make something
-            </a>
+              {logoContent}
+            </GlassSurface>
 
-            {/* Mobile hamburger */}
-            <button
-              className="nav-hamburger"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Toggle menu"
-              style={{
-                display: 'none',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '4px',
-                flexDirection: 'column',
-                gap: '5px',
-              }}
+            <GlassSurface
+              width="auto"
+              height="auto"
+              {...glassProps}
+              style={{ border: '1px solid rgba(255,255,255,0.65)' }}
             >
-              <span style={{ display: 'block', width: '20px', height: '1.5px', background: 'var(--text)', transition: 'transform 0.2s', transform: mobileOpen ? 'rotate(45deg) translate(4.5px, 4.5px)' : 'none' }} />
-              <span style={{ display: 'block', width: '20px', height: '1.5px', background: 'var(--text)', transition: 'opacity 0.2s', opacity: mobileOpen ? 0 : 1 }} />
-              <span style={{ display: 'block', width: '20px', height: '1.5px', background: 'var(--text)', transition: 'transform 0.2s', transform: mobileOpen ? 'rotate(-45deg) translate(4.5px, -4.5px)' : 'none' }} />
-            </button>
-          </div>
-        </nav>
-      </GlassSurface>
+              {linksContent}
+            </GlassSurface>
+
+            <GlassSurface
+              width="auto"
+              height="auto"
+              {...glassProps}
+              style={{ border: '1px solid rgba(255,255,255,0.65)' }}
+            >
+              {ctaContent}
+            </GlassSurface>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Mobile drawer */}
       <AnimatePresence>
@@ -183,12 +248,7 @@ export default function Navbar() {
             }}
           >
             {links.map((l) => (
-              <a
-                key={l.label}
-                href={l.href}
-                onClick={() => setMobileOpen(false)}
-                style={{ fontSize: '15px', color: 'var(--text)' }}
-              >
+              <a key={l.label} href={l.href} onClick={() => setMobileOpen(false)} style={{ fontSize: '15px', color: 'var(--text)' }}>
                 {l.label}
               </a>
             ))}
@@ -216,8 +276,9 @@ export default function Navbar() {
           .nav-menu { display: none !important; }
           .nav-cta { display: none !important; }
           .nav-hamburger { display: flex !important; }
+          .nav-split { display: none !important; }
+          .nav-single { display: block !important; }
         }
       `}</style>
-    </motion.header>
   );
 }
