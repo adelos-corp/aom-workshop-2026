@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { animate, useMotionValue, useMotionValueEvent, useReducedMotion } from 'motion/react';
 import { HugeiconsIcon } from '@hugeicons/react';
 import {
-  ArrowDown01Icon,
-  Attachment01Icon,
   Cancel01Icon,
   File02Icon,
   HelpCircleIcon,
@@ -47,7 +45,6 @@ type PromptBarProps = {
   busy?: boolean;
   onSend?: (text: string, payload: { attachments: Attachment[]; model: Model; effort: string }) => void | Promise<void>;
   onStop?: () => void;
-  onAttach?: () => void | Attachment[] | Promise<void | Attachment[]>;
   onDictate?: () => void | string | Promise<void | string>;
   background?: string;
   color?: string;
@@ -118,7 +115,6 @@ export default function PromptBar({
   busy = false,
   onSend,
   onStop,
-  onAttach,
   onDictate,
   background = '#ffffff',
   color = '#111111',
@@ -322,10 +318,11 @@ export default function PromptBar({
           <div className="prompt-bar__effort-ends"><span>Minimal</span><span>Experimental</span></div>
           <div className="prompt-bar__effort-track" role="slider" tabIndex={0} aria-valuemin={0} aria-valuemax={efforts.length - 1} aria-valuenow={effortIndex} onClick={event => {
             const rect = event.currentTarget.getBoundingClientRect();
-            setEffort(Math.round(((event.clientX - rect.left - EDGE) / Math.max(1, rect.width - EDGE * 2)) * (efforts.length - 1)));
+            const percent = Math.max(0, Math.min(100, ((event.clientX - rect.left) / rect.width) * 100));
+            setEffort(Math.min(efforts.length - 1, Math.floor(percent / 100 * efforts.length)));
           }}>
-            <span className="prompt-bar__effort-fill" style={{ width: `${efforts.length > 1 ? effortIndex / (efforts.length - 1) * 100 : 0}%` }} />
-            <span className="prompt-bar__effort-thumb" style={{ left: `${efforts.length > 1 ? effortIndex / (efforts.length - 1) * 100 : 0}%` }} />
+            <span className="prompt-bar__effort-fill" style={{ width: `${efforts.length ? ((effortIndex + 1) / efforts.length) * 100 : 0}%` }} />
+            <span className="prompt-bar__effort-thumb" style={{ left: `${efforts.length ? ((effortIndex + 0.5) / efforts.length) * 100 : 0}%` }} />
           </div>
         </div>
       ) : null}
