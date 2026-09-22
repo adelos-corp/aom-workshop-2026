@@ -1,0 +1,10 @@
+import { ArrowDownRight, ArrowUpRight, Code2, Play, Sparkles } from 'lucide-react'
+
+const duckPrompt = 'Assume the PC has no dependencies, just W10 and VS Code. Now, give me the complete walkthrough of creating a website using a .tsx file, a .css file, a HTML file and deploy it using localhost - next.js'
+
+export function HeroBuild() {
+  return <section className="hero" id="top">
+    <div className="hero-content"><p className="eyebrow hero-kicker"><span className="status-dot" /> KES POLYTECHNIC COLLEGE <span>·</span> 2026</p><h1><span className="hero-title-line">YOU HAVE</span><span className="hero-title-line accent-text">AN IDEA.</span><span className="hero-title-line">NOW BUILD IT<span className="orange-dot">.</span></span></h1><p className="hero-copy">Learn prompt engineering. Learn vibe coding.<br />Build your own website.</p><div className="hero-actions"><a className="button button-bright" href={`https://duck.ai/?q=${encodeURIComponent(duckPrompt)}`} target="_blank" rel="noreferrer">START BUILDING <ArrowUpRight size={17} /></a><a className="text-link" href="#flow"><Play size={14} fill="currentColor" /> SEE HOW IT WORKS</a></div></div>
+    <div className="build-visual" aria-label="Idea to interface process"><div className="visual-grid" /><div className="orbit orbit-one" /><div className="orbit orbit-two" /><div className="visual-stack"><div className="stack-label">01 / THE INPUT</div><div className="stack-card idea-card"><span>IDEA</span><Sparkles size={19} /></div><div className="stack-connector">↓</div><div className="stack-card prompt-card"><span>PROMPT</span><span className="typing">_</span></div><div className="stack-connector">↓</div><div className="stack-card code-card"><Code2 size={17} /><span>&lt;build /&gt;</span></div><div className="stack-connector">↓</div><div className="stack-card interface-card"><div className="mini-browser"><i /><i /><i /></div><span>INTERFACE</span></div></div><div className="visual-caption">NATURAL LANGUAGE <span>→</span> WORKING SOFTWARE</div></div><div className="scroll-cue"><span>SCROLL TO EXPLORE</span><ArrowDownRight size={17} /></div>
+  </section>
+}
