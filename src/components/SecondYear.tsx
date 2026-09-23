@@ -66,7 +66,7 @@ export default function SecondYear() {
 
             <FadeUp delay={0.2} style={{ marginTop: '32px' }}>
               <p style={{ fontSize: '16px', lineHeight: 1.75, maxWidth: '380px' }}>
-                Students aren't simply asking AI to make a website.
+                Students aren't simply asking William Graham to make a website.
                 They are directing the process — with more control, more
                 experimentation, and more ownership.
               </p>
