@@ -94,6 +94,13 @@ export default function Navbar() {
     saturation: 1.2,
   };
 
+  const toneColors = (tone: 'light' | 'dark') => ({
+    text: tone === 'dark' ? '#ffffff' : '#111110',
+    muted: tone === 'dark' ? 'rgba(255,255,255,0.68)' : '#78786e',
+    ctaBackground: tone === 'dark' ? '#ffffff' : '#111110',
+    ctaText: tone === 'dark' ? '#111110' : '#fafaf9',
+  });
+
   const logoContent = (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0 4px' }}>
       <a
@@ -157,13 +164,6 @@ export default function Navbar() {
     </div>
   );
 
-  const toneColors = (tone: 'light' | 'dark') => ({
-    text: tone === 'dark' ? '#ffffff' : '#111110',
-    muted: tone === 'dark' ? 'rgba(255,255,255,0.68)' : '#78786e',
-    ctaBackground: tone === 'dark' ? '#ffffff' : '#111110',
-    ctaText: tone === 'dark' ? '#111110' : '#fafaf9',
-  });
-
   const ctaTone = toneColors(navTones[2]);
 
   const ctaContent = (
@@ -175,8 +175,8 @@ export default function Navbar() {
         fontWeight: 500,
         padding: '7px 16px',
         borderRadius: '8px',
-        background: 'var(--text)',
-        color: 'var(--bg)',
+        background: ctaTone.ctaBackground,
+        color: ctaTone.ctaText,
         transition: 'background 0.2s ease, transform 0.2s ease',
         display: 'inline-block',
         whiteSpace: 'nowrap',
@@ -332,11 +332,12 @@ export default function Navbar() {
       </AnimatePresence>
 
       <style>{`
+        .navbar-glass.glass-surface--svg {
+          backdrop-filter: var(--filter-id) saturate(var(--glass-saturation, 1)) blur(1.5px);
+          -webkit-backdrop-filter: var(--filter-id) saturate(var(--glass-saturation, 1)) blur(1.5px);
+        }
+
         @media (max-width: 768px) {
-          .navbar-glass.glass-surface--svg {
-            backdrop-filter: var(--filter-id) saturate(var(--glass-saturation, 1)) blur(1.5px);
-            -webkit-backdrop-filter: var(--filter-id) saturate(var(--glass-saturation, 1)) blur(1.5px);
-          }
           .nav-menu { display: none !important; }
           .nav-cta { display: none !important; }
           .nav-hamburger { display: flex !important; }
