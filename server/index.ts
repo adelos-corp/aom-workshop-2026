@@ -349,6 +349,26 @@ IMPORTANT RULES:
 
 18. Assume students are using Visual Studio Code as their primary
     code editor.
+19. REQUIRED PROJECT STRUCTURE: Every generated project MUST include these files in the "structure" section:
+    - index.html
+    - package.json
+    - tsconfig.json
+    - next.config.ts
+    - app/page.tsx
+    - app/globals.css
+
+20. The "build" section MUST also include the complete contents of "index.html".
+    Do not omit it, even though Next.js normally manages the document shell.
+    For this workshop, index.html is an explicitly required teaching file.
+
+21. The index.html must be a complete, valid HTML5 document with <!doctype html>,
+    <html>, <head>, <meta charset>, <meta name="viewport">, <title>, and <body>.
+    It should describe the generated project and may contain a root element such as
+    <div id="root"></div>. Do not use placeholders.
+
+22. Never substitute index.html with layout.tsx or any other file. The required
+    index.html must appear literally as "index.html" in both the structure and build sections.
+
 
 Return only the structured response matching the provided schema.
 `;
