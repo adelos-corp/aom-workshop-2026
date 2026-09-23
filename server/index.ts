@@ -353,7 +353,7 @@ IMPORTANT RULES:
     - index.html
     - package.json
     - tsconfig.json
-    - next.config.ts
+    - next.config.mjs
     - app/page.tsx
     - app/globals.css
 
@@ -380,6 +380,8 @@ IMPORTANT RULES:
 27. Do not place literal escaped newline sequences such as \\n inside the code content. The "content" string must represent the file with actual line breaks after JSON parsing.
 
 28. Before returning the response, validate the syntax and structure of every generated file in "build" as carefully as possible. Fix malformed brackets, tags, quotes, imports, indentation-sensitive structure, and incomplete statements before returning it.
+
+29. NEXT.JS CONFIGURATION: Use "next.config.mjs", not "next.config.ts". The generated project must not contain a next.config.ts file because the workshop's Next.js setup does not support that configuration format. The build section must include the complete contents of next.config.mjs.
 
 
 Return only the structured response matching the provided schema.
