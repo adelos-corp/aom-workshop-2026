@@ -132,7 +132,7 @@ export default function Navbar() {
           color: toneColors(navTones[0]).text,
         }}
       >
-        The Art of Making
+        Fly
       </a>
     </div>
   );
