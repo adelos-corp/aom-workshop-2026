@@ -301,7 +301,7 @@ IMPORTANT RULES:
 4. The setup MUST begin from create-next-app. Do not manually construct the project scaffold.
 
 5. The SET UP section MUST contain exactly these commands, in this exact order:
-   npx create-next-app@latest <project-name> --typescript --eslint --app --use-npm
+   npx create-next-app@latest <project-name> --typescript --eslint --app --no-tailwind --no-src-dir --no-agents-md --use-npm
    cd <project-name>
    code .
    Do NOT use mkdir.
