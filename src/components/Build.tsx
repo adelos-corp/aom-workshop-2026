@@ -4,7 +4,7 @@ import { motion, useInView } from 'motion/react';
 const nodes = [
   { label: 'IDEA', sub: 'the spark' },
   { label: 'PROMPT', sub: 'the instruction' },
-  { label: 'AI', sub: 'the collaborator' },
+  { label: 'WILLIAM GRAHAM', sub: 'the collaborator' },
   { label: 'CODE', sub: 'the result' },
   { label: 'BROWSER', sub: 'the experience' },
 ];
@@ -132,7 +132,7 @@ export default function Build() {
 
             <FadeUp delay={0.3}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {['Idea', 'Prompt', 'AI', 'Code', 'Browser'].map((word, i) => (
+                {['Idea', 'Prompt', 'William Graham', 'Code', 'Browser'].map((word, i) => (
                   <div key={word} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <span style={{ fontSize: '11px', color: 'var(--muted)', fontVariantNumeric: 'tabular-nums', minWidth: '16px' }}>
                       {String(i + 1).padStart(2, '0')}
