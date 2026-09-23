@@ -300,16 +300,21 @@ IMPORTANT RULES:
 4. Styling must use CSS. Do not use Tailwind CSS unless the student
    explicitly requests it.
 
-5. Use npm commands.
+5. Use npm commands only where they are needed to run the completed project.
 
-6. Visual Studio Code is the assumed code editor, but do not generate
-   instructions for installing VS Code or opening the project in VS Code.
-   Assume the student has already opened the project there.
+6. Visual Studio Code is the assumed code editor. The setup flow MUST explicitly
+   create the project directory, enter it, and open it in Visual Studio Code.
+   Do not generate instructions for installing VS Code.
 
-7. The generated project must be runnable with:
+7. The SET UP section must begin with exactly this workflow:
 
-   npm install
-   npm run dev
+   mkdir <project-name>
+   cd <project-name>
+   code .
+
+   Do NOT put npm install in the SET UP section. The student should first create
+   the directory, enter it, and open it in VS Code, then place the generated files
+   into that directory.
 
 8. The intensity represents how strongly the style should influence
    the visual design:
@@ -325,10 +330,8 @@ IMPORTANT RULES:
 11. Keep the project reasonably small so a student can understand,
     modify and run it locally.
 
-12. The final project must be runnable with:
-
-    npm install
-    npm run dev
+12. The final project must be runnable with npm run dev after its dependencies are
+    available. The setup flow itself must not begin with npm install.
 
 13. The "deploy" section should NOT contain Vercel or cloud deployment.
     The students are running their projects locally.
@@ -339,10 +342,12 @@ IMPORTANT RULES:
 
 15. Visual Studio Code is the recommended development environment.
 
-16. The setup instructions must explain how to open the generated
-    project in Visual Studio Code using:
-
-    code .
+16. The setup instructions MUST use this exact order:
+    1. mkdir <project-name>
+    2. cd <project-name>
+    3. code .
+    Do not put npm install before these steps, and do not include npm install in
+    the SET UP command list.
 
 17. The walkthrough should explain how students can locate and edit
     the important files in Visual Studio Code.
@@ -383,6 +388,16 @@ IMPORTANT RULES:
 
 29. NEXT.JS CONFIGURATION: Use "next.config.mjs", not "next.config.ts". The generated project must not contain a next.config.ts file because the workshop's Next.js setup does not support that configuration format. The build section must include the complete contents of next.config.mjs.
 
+30. SETUP COMMANDS ARE STRICT: The "setup.commands" array must contain only the initial workspace setup commands, in this exact order:
+    mkdir <project-name>
+    cd <project-name>
+    code .
+    Replace <project-name> with a suitable kebab-case project name.
+    Do NOT include npm install in "setup.commands". Do NOT include create-next-app.
+    Dependencies can be installed later when the student is ready to run the completed project.
+
+31. The "run.commands" array should contain the commands needed to run the completed project, including npm install if dependencies have not yet been installed, followed by npm run dev. Keep those runtime commands out of the initial SET UP section.
+
 
 Return only the structured response matching the provided schema.
 `;
@@ -419,11 +434,3 @@ Return only the structured response matching the provided schema.
 app.listen(PORT, () => {
   console.log(`AOM AI server running at http://localhost:${PORT}`);
 });
-
-30. SETUP COMMAND ORDER IS STRICT: The "setup.commands" array must begin with commands that initialize/create the project directory, then "cd" into that directory, then "code ." to open it in Visual Studio Code. Do NOT put "npm install" before "code .". If dependencies are needed, "npm install" may appear only after the directory has been initialized, entered, and opened in VS Code.
-
-31. For a typical Next.js project, prefer a clear sequence such as:
-    mkdir <project-name>
-    cd <project-name>
-    code .
-    Then provide the project files to place in that directory. Do not use create-next-app unless the student's request specifically requires it, because William Graham is generating the project files itself.
