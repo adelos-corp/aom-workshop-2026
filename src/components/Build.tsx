@@ -132,7 +132,7 @@ export default function Build() {
 
             <FadeUp delay={0.3}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {['Idea', 'Prompt', 'WG', 'Code', 'Browser'].map((word, i) => (
+                {['Idea', 'Prompt', 'William Graham', 'Code', 'Browser'].map((word, i) => (
                   <div key={word} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <span style={{ fontSize: '11px', color: 'var(--muted)', fontVariantNumeric: 'tabular-nums', minWidth: '16px' }}>
                       {String(i + 1).padStart(2, '0')}
