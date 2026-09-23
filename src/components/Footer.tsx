@@ -47,7 +47,7 @@ export default function Footer() {
                   marginBottom: '8px',
                 }}
               >
-                The Art of Making
+                Fly
               </div>
               <div style={{ fontSize: '13px', color: 'var(--muted)' }}>
                 Created and organised by Students of KES Polytechnic College
