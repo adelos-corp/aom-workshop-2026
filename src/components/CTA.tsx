@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { motion, useInView } from 'motion/react';
 import PromptBar from './PromptBar';
 import GeneratedResult from './GeneratedResult';
+import ThoughtLine from './ThoughtLine';
 
 type GeneratedResultData = {
   title: string;
@@ -195,6 +196,22 @@ export default function CTA() {
               maxRows={5}
               pressScale={0.96}
             />
+
+            {(busy || result) && (
+  <ThoughtLine
+    label="Generating code..."
+    doneLabel="Code generated"
+    breathDepth={0.6}
+    breathPeriod={1.9}
+    settleDuration={400}
+    settleBlur={3.5}
+    working={busy}
+    showTimer={false}
+    collapsible={false}
+    glyph="sparkle"
+    color="var(--text)"
+  />
+)}
 
             {result && <GeneratedResult result={result} />}
           </motion.div>

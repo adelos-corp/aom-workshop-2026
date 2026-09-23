@@ -1,14 +1,5 @@
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { GoogleGenAI, Type } from "@google/genai";
-
-type VercelRequest = {
-  method?: string;
-  body?: any;
-};
-
-type VercelResponse = {
-  status: (code: number) => VercelResponse;
-  json: (body: any) => any;
-};
 
 const apiKey = process.env.WILLIAM_API_KEY;
 
