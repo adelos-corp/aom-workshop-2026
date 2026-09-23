@@ -83,3 +83,10 @@ button {
   background: rgba(232, 93, 47, 0.15);
   color: var(--text);
 }
+
+
+.william-graham {
+  font-family: 'Acelon William Graham', serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
