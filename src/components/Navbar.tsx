@@ -1,10 +1,76 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import GlassSurface from './GlassSurface';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [navTones, setNavTones] = useState<('light' | 'dark')[]>(['light', 'light', 'light']);
+  const navHeaderRef = useRef<HTMLElement>(null);
+  const navPanelRefs = [
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+  ];
+
+  const getLuminance = (color: string) => {
+    const match = color.match(/rgba?\\(([^)]+)\\)/i);
+    if (!match) return null;
+
+    const parts = match[1].split(',').map((part) => parseFloat(part.trim()));
+    if (parts.length < 3) return null;
+
+    const [r, g, b] = parts;
+    const alpha = parts.length >= 4 ? parts[3] : 1;
+    if (alpha === 0) return null;
+
+    const toLinear = (value: number) => {
+      const channel = value / 255;
+      return channel <= 0.03928 ? channel / 12.92 : Math.pow((channel + 0.055) / 1.055, 2.4);
+    };
+
+    return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
+  };
+
+  const detectNavTone = (panel: HTMLElement) => {
+    const rect = panel.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    const header = navHeaderRef.current;
+
+    const elements = document.elementsFromPoint(x, y);
+    const behind = elements.find((element) => !header?.contains(element));
+
+    let current: Element | null = behind ?? null;
+
+    while (current) {
+      const styles = window.getComputedStyle(current);
+      const luminance = getLuminance(styles.backgroundColor);
+
+      if (luminance !== null) {
+        return luminance < 0.42 ? 'dark' : 'light';
+      }
+
+      current = current.parentElement;
+    }
+
+    return 'light';
+  };
+
+  useEffect(() => {
+    const updateNavTones = () => {
+      setNavTones(navPanelRefs.map((ref) => ref.current ? detectNavTone(ref.current) : 'light'));
+    };
+
+    updateNavTones();
+    window.addEventListener('scroll', updateNavTones, { passive: true });
+    window.addEventListener('resize', updateNavTones);
+
+    return () => {
+      window.removeEventListener('scroll', updateNavTones);
+      window.removeEventListener('resize', updateNavTones);
+    };
+  }, []);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 24);
@@ -56,7 +122,7 @@ export default function Navbar() {
           fontWeight: 600,
           letterSpacing: '0.08em',
           textTransform: 'uppercase',
-          color: 'var(--text)',
+          color: toneColors(navTones[0]).text,
         }}
       >
         The Art of Making
@@ -78,18 +144,27 @@ export default function Navbar() {
           href={l.href}
           style={{
             fontSize: '13px',
-            color: 'var(--muted)',
+            color: toneColors(navTones[1]).muted,
             transition: 'color 0.2s ease',
             letterSpacing: '0.01em',
           }}
-          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--text)')}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--muted)')}
+          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = toneColors(navTones[1]).text)}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = toneColors(navTones[1]).muted)}
         >
           {l.label}
         </a>
       ))}
     </div>
   );
+
+  const toneColors = (tone: 'light' | 'dark') => ({
+    text: tone === 'dark' ? '#ffffff' : '#111110',
+    muted: tone === 'dark' ? 'rgba(255,255,255,0.68)' : '#78786e',
+    ctaBackground: tone === 'dark' ? '#ffffff' : '#111110',
+    ctaText: tone === 'dark' ? '#111110' : '#fafaf9',
+  });
+
+  const ctaTone = toneColors(navTones[2]);
 
   const ctaContent = (
     <a
@@ -107,11 +182,11 @@ export default function Navbar() {
         whiteSpace: 'nowrap',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.background = '#333';
+        e.currentTarget.style.background = navTones[2] === 'dark' ? '#e5e5e5' : '#333';
         e.currentTarget.style.transform = 'scale(1.02)';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.background = 'var(--text)';
+        e.currentTarget.style.background = ctaTone.ctaBackground;
         e.currentTarget.style.transform = 'scale(1)';
       }}
     >
@@ -124,6 +199,7 @@ export default function Navbar() {
       initial={{ opacity: 0, x: '-50%', y: -12 }}
       animate={{ opacity: 1, x: '-50%', y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      ref={navHeaderRef}
       style={{
         position: 'fixed',
         top: '16px',
@@ -145,11 +221,13 @@ export default function Navbar() {
         }}
       >
         <motion.div
+          ref={navPanelRefs[0]}
           animate={{ x: 0 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           style={{ justifySelf: 'start', minWidth: 0 }}
         >
           <GlassSurface
+            className="navbar-glass"
             width="auto"
             height="auto"
             {...glassProps}
@@ -160,16 +238,18 @@ export default function Navbar() {
               boxShadow: scrolled ? '0 2px 24px rgba(0,0,0,0.06)' : 'none',
             }}
           >
-            {logoContent}
+            <div style={{ color: toneColors(navTones[0]).text }}>{logoContent}</div>
           </GlassSurface>
         </motion.div>
 
         <motion.div
+          ref={navPanelRefs[1]}
           animate={{ x: 0 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           style={{ justifySelf: 'center', minWidth: 0 }}
         >
           <GlassSurface
+            className="navbar-glass"
             width="auto"
             height="auto"
             {...glassProps}
@@ -181,16 +261,18 @@ export default function Navbar() {
               boxShadow: scrolled ? '0 2px 24px rgba(0,0,0,0.06)' : 'none',
             }}
           >
-            {linksContent}
+            <div style={{ color: toneColors(navTones[1]).text }}>{linksContent}</div>
           </GlassSurface>
         </motion.div>
 
         <motion.div
+          ref={navPanelRefs[2]}
           animate={{ x: 0 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           style={{ justifySelf: 'end', minWidth: 0 }}
         >
           <GlassSurface
+            className="navbar-glass"
             width="auto"
             height="auto"
             {...glassProps}
@@ -251,6 +333,10 @@ export default function Navbar() {
 
       <style>{`
         @media (max-width: 768px) {
+          .navbar-glass.glass-surface--svg {
+            backdrop-filter: var(--filter-id) saturate(var(--glass-saturation, 1)) blur(1.5px);
+            -webkit-backdrop-filter: var(--filter-id) saturate(var(--glass-saturation, 1)) blur(1.5px);
+          }
           .nav-menu { display: none !important; }
           .nav-cta { display: none !important; }
           .nav-hamburger { display: flex !important; }
