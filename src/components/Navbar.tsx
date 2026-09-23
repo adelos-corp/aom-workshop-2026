@@ -14,7 +14,7 @@ export default function Navbar() {
   ];
 
   const getLuminance = (color: string) => {
-    const match = color.match(/rgba?\\(([^)]+)\\)/i);
+    const match = color.match(/rgba?\(([^)]+)\)/i);
     if (!match) return null;
 
     const parts = match[1].split(',').map((part) => parseFloat(part.trim()));
