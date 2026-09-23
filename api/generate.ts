@@ -385,7 +385,7 @@ IMPORTANT RULES:
 
     The setup command sequence must be:
 
-    npx create-next-app@latest <project-name> --typescript --eslint --app --src-dir --use-npm
+    npx create-next-app@latest <project-name> --typescript --eslint --app --use-npm
     cd <project-name>
     code .
 
