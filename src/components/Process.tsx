@@ -3,7 +3,7 @@ import { motion, useInView } from 'motion/react';
 
 const steps = [
   { num: '01', title: 'IDEA', body: 'Start with something you want to exist.' },
-  { num: '02', title: 'PROMPT', body: 'Tell William Graham what you want to create.' },
+  { num: '02', title: 'PROMPT', body: 'Tell WG what you want to create.' },
   { num: '03', title: 'CODE', body: 'Work with the generated code.' },
   { num: '04', title: 'DESIGN', body: 'Make it yours.' },
   { num: '05', title: 'REFINE', body: 'Break it. Fix it. Improve it.' },
