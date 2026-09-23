@@ -64,6 +64,19 @@ export default function Footer() {
             </div>
           </div>
 
+          {/* Workshop footnote */}
+          <div
+            style={{
+              paddingTop: '18px',
+              fontSize: '10px',
+              color: 'var(--muted)',
+              opacity: 0.45,
+              letterSpacing: '0.02em',
+            }}
+          >
+            Workshop initiated by ADELOS Corp.
+          </div>
+
           {/* Bottom bar */}
           <div
             style={{
