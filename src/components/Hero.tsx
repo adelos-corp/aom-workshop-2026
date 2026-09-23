@@ -119,22 +119,6 @@ export default function Hero() {
             The Art of<br />Making
           </motion.h1>
 
-          {/* Powered by */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.34, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              fontSize: 'clamp(13px, 1.7vw, 17px)',
-              color: 'var(--muted)',
-              letterSpacing: '0.02em',
-              marginTop: '-8px',
-              marginBottom: '18px',
-            }}
-          >
-            Powered by <span className="william-graham">William Graham</span>
-          </motion.div>
-
           {/* Subline */}
           <motion.p
             initial={{ opacity: 0, y: 16 }}
@@ -150,6 +134,22 @@ export default function Hero() {
           >
             whatever you want.&nbsp;&nbsp;however you want.
           </motion.p>
+
+          {/* Powered by */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.34, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              fontSize: 'clamp(13px, 1.7vw, 17px)',
+              color: 'var(--muted)',
+              letterSpacing: '0.02em',
+              marginTop: '-8px',
+              marginBottom: '18px',
+            }}
+          >
+            Powered by <span className="william-graham">William Graham</span>
+          </motion.div>
 
           {/* Stage sequence */}
           <motion.div
