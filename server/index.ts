@@ -369,6 +369,18 @@ IMPORTANT RULES:
 22. Never substitute index.html with layout.tsx or any other file. The required
     index.html must appear literally as "index.html" in both the structure and build sections.
 
+23. CODE FORMATTING IS MANDATORY: Every file in the "build" section must be returned as properly formatted, multi-line source code. Preserve normal indentation, line breaks, blank lines, and nested structure. Never compress an entire file into one line.
+
+24. The "content" field must contain the exact source code for that file, not a summary, escaped pseudo-code, minified code, or prose description. Use syntax appropriate to the declared "language".
+
+25. TypeScript and TSX must use valid TypeScript/TSX syntax with consistent indentation. JSX elements, props, arrays, objects, functions, and nested blocks must be laid out across readable lines where appropriate.
+
+26. CSS must be formatted as normal multi-line CSS with selectors, declarations, and closing braces on separate readable lines. HTML must be formatted as normal multi-line HTML.
+
+27. Do not place literal escaped newline sequences such as \\n inside the code content. The "content" string must represent the file with actual line breaks after JSON parsing.
+
+28. Before returning the response, validate the syntax and structure of every generated file in "build" as carefully as possible. Fix malformed brackets, tags, quotes, imports, indentation-sensitive structure, and incomplete statements before returning it.
+
 
 Return only the structured response matching the provided schema.
 `;
