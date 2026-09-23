@@ -280,7 +280,7 @@ ${selectedStyle.description}
 
 TECH STACK:
 - Visual Studio Code
-- Next.js
+- Next.js App Router
 - Node.js
 - TypeScript
 - TSX
@@ -290,127 +290,139 @@ TECH STACK:
 
 IMPORTANT RULES:
 
-1. Generate a real, coherent website concept based specifically on
-   the student's idea.
+1. Generate a real, coherent website based specifically on the student's idea.
+   Never replace the idea with a generic template.
 
-2. Do not replace the student's idea with a generic template.
+2. The project MUST use the Next.js App Router with TypeScript/TSX.
 
-3. The generated project must use Next.js and TypeScript/TSX. The setup must begin from a standard create-next-app scaffold.
+3. Use plain CSS. Do not use Tailwind CSS unless the student explicitly asks for it.
+   Keep dependencies minimal.
 
-4. Styling must use CSS. Do not use Tailwind CSS unless the student
-   explicitly requests it.
+4. The setup MUST begin from create-next-app. Do not manually construct the project scaffold.
 
-5. Use npm commands only where they are needed to run the completed project.
-
-6. Visual Studio Code is the assumed code editor. The setup flow MUST explicitly
-   create the project directory, enter it, and open it in Visual Studio Code.
-   Do not generate instructions for installing VS Code.
-
-7. The SET UP section must begin with exactly this workflow:
-
-   mkdir <project-name>
+5. The SET UP section MUST contain exactly these commands, in this exact order:
+   npx create-next-app@latest <project-name> --typescript --eslint --app --use-npm
    cd <project-name>
    code .
+   Do NOT use mkdir.
+   Do NOT add npm install.
+   create-next-app performs dependency installation.
 
-   Do NOT put npm install in the SET UP section. The student should first create
-   the directory, enter it, and open it in VS Code, then place the generated files
-   into that directory.
+6. Do NOT use --src-dir. The application MUST have a ROOT-LEVEL app/ directory.
+   Never generate src/app/.
 
-8. The intensity represents how strongly the style should influence
-   the visual design:
-   - low intensity = restrained interpretation
-   - high intensity = much stronger interpretation
+7. The generated project must run with npm run dev after the generated files are placed
+   into the create-next-app scaffold.
 
-9. Generate code that is understandable to a second-year college
-   student. Avoid unnecessary complexity.
+8. NEXT.JS CONFIGURATION IS STRICT:
+   Use a ROOT-LEVEL file named exactly next.config.ts.
+   Never generate next.config.mjs or next.config.js.
+   The complete next.config.ts file MUST be present in both structure and build.
+   It must use valid TypeScript, for example:
+   import type { NextConfig } from "next";
 
-10. Generate complete files where possible. Do not use placeholders
-   such as "// rest of code goes here".
+   const nextConfig: NextConfig = {};
 
-11. Keep the project reasonably small so a student can understand,
-    modify and run it locally.
+   export default nextConfig;
 
-12. The final project must be runnable with npm run dev after its dependencies are
-    available. The setup flow itself must not begin with npm install.
+9. REQUIRED STRUCTURE. The structure section MUST include:
+   - index.html
+   - package.json
+   - tsconfig.json
+   - next.config.ts
+   - app/layout.tsx
+   - app/page.tsx
+   - app/globals.css
 
-13. The "deploy" section should NOT contain Vercel or cloud deployment.
-    The students are running their projects locally.
+10. REQUIRED BUILD FILES. The build section MUST include complete contents for every file
+    listed above. Never summarize a file, omit it, or say "same as above".
 
-14. Explain the project as a teaching exercise. Students should be able
-    to inspect the generated code and understand what each important
-    part does.
+11. index.html is a REQUIRED WORKSHOP TEACHING FILE. It must be a complete valid HTML5 document
+    containing <!doctype html>, <html>, <head>, charset, viewport, <title>, and <body>.
+    It is teaching material only. Do not put React imports, JSX, Next.js imports, or a second
+    application bootstrap script in it.
 
-15. Visual Studio Code is the recommended development environment.
+12. app/layout.tsx MUST import "./globals.css", export valid metadata, and render:
+    <html lang="en"><body>{children}</body></html>.
+    Do not import files that do not exist.
 
-16. The setup instructions MUST use this exact order:
-    1. mkdir <project-name>
-    2. cd <project-name>
-    3. code .
-    Do not put npm install before these steps, and do not include npm install in
-    the SET UP command list.
+13. app/page.tsx MUST export a default React component and only import packages/files that exist.
+    If it uses useState, useEffect, useRef, event handlers, window, document, localStorage,
+    sessionStorage, or other browser-only APIs, put "use client"; as the FIRST statement.
+    Otherwise keep it as a Server Component.
 
-17. The walkthrough should explain how students can locate and edit
-    the important files in Visual Studio Code.
+14. app/globals.css MUST contain complete valid CSS for the generated page. Do not reference
+    missing files, missing fonts, or undefined CSS imports.
 
-18. Assume students are using Visual Studio Code as their primary
-    code editor.
-19. REQUIRED PROJECT STRUCTURE: Every generated project MUST include these files in the "structure" section:
-    - index.html
-    - package.json
-    - tsconfig.json
-    - next.config.mjs
-    - app/page.tsx
-    - app/globals.css
+15. package.json MUST preserve a normal Next.js scaffold. It MUST contain:
+    "dev": "next dev"
+    "build": "next build"
+    "start": "next start"
+    and a valid lint script supported by the generated scaffold.
+    Do not import any package that package.json does not declare.
 
-20. The "build" section MUST also include the complete contents of "index.html".
-    Do not omit it, even though Next.js normally manages the document shell.
-    For this workshop, index.html is an explicitly required teaching file.
+16. tsconfig.json MUST be valid JSON and compatible with a current create-next-app TypeScript
+    App Router project. Do not invent obsolete compiler options.
 
-21. The index.html must be a complete, valid HTML5 document with <!doctype html>,
-    <html>, <head>, <meta charset>, <meta name="viewport">, <title>, and <body>.
-    It should describe the generated project and may contain a root element such as
-    <div id="root"></div>. Do not use placeholders.
+17. Keep the project understandable to a second-year college student. Avoid unnecessary
+    libraries, state-management systems, databases, APIs, or abstractions.
 
-22. Never substitute index.html with layout.tsx or any other file. The required
-    index.html must appear literally as "index.html" in both the structure and build sections.
+18. Generate COMPLETE files. Never use placeholders such as:
+    "// rest of code goes here"
+    "...etc"
+    "TODO: implement"
+    "add your code here"
 
-23. CODE FORMATTING IS MANDATORY: Every file in the "build" section must be returned as properly formatted, multi-line source code. Preserve normal indentation, line breaks, blank lines, and nested structure. Never compress an entire file into one line.
+19. CODE FORMATTING IS MANDATORY. Every build file must be readable multi-line source code
+    with normal indentation, line breaks, blank lines, and nested structure. Never compress
+    an entire file into one line.
 
-24. The "content" field must contain the exact source code for that file, not a summary, escaped pseudo-code, minified code, or prose description. Use syntax appropriate to the declared "language".
+20. The content field must contain actual source code, not a summary, pseudo-code, Markdown
+    fences, or prose. Do not wrap file contents in triple-backtick fences.
 
-25. TypeScript and TSX must use valid TypeScript/TSX syntax with consistent indentation. JSX elements, props, arrays, objects, functions, and nested blocks must be laid out across readable lines where appropriate.
+21. Do not place literal escaped newline sequences such as \\n inside source code. After JSON
+    parsing, content must contain real line breaks.
 
-26. CSS must be formatted as normal multi-line CSS with selectors, declarations, and closing braces on separate readable lines. HTML must be formatted as normal multi-line HTML.
+22. TypeScript/TSX must be syntactically valid. Match braces, parentheses, brackets, quotes,
+    JSX tags, imports, and exports. Do not reference undefined variables or components.
 
-27. Do not place literal escaped newline sequences such as \\n inside the code content. The "content" string must represent the file with actual line breaks after JSON parsing.
+23. CSS must be syntactically valid with balanced braces and valid declarations.
+    HTML must be valid and properly nested.
 
-28. Before returning the response, validate the syntax and structure of every generated file in "build" as carefully as possible. Fix malformed brackets, tags, quotes, imports, indentation-sensitive structure, and incomplete statements before returning it.
+24. INTERNAL CONSISTENCY IS REQUIRED:
+    - every local import must resolve to a file supplied by the scaffold or build section
+    - every package import must be declared in package.json
+    - no import may reference src/app
+    - no import may reference next.config.mjs
+    - every interactive browser feature must live in a Client Component
+    - every component, function, variable, and CSS class used must be defined appropriately
 
-29. NEXT.JS CONFIGURATION: Use "next.config.mjs", not "next.config.ts". The generated project must not contain a next.config.ts file because the workshop's Next.js setup does not support that configuration format. The build section must include the complete contents of next.config.mjs.
+25. Do not generate extra files unless genuinely necessary. If an extra local file is needed,
+    include it completely in BOTH structure and build.
 
-30. SETUP COMMANDS ARE STRICT: The "setup.commands" array must initialize a COMPLETE Next.js project before the student starts editing code. Use create-next-app so the standard Next.js files, folders, dependencies, and configuration are created automatically.
+26. Avoid remote assets and external services unless they are guaranteed to work without setup.
+    Prefer CSS, inline SVG, text, and built-in browser capabilities.
 
-    The setup command sequence must be:
+27. The design style and intensity should affect the visual result without sacrificing
+    functionality, readability, accessibility, or valid code.
 
-    npx create-next-app@latest <project-name> --typescript --eslint --app --use-npm
-    cd <project-name>
-    code .
+28. Accessibility basics are required: semantic HTML, keyboard-accessible interactions,
+    buttons for actions, labels for form controls, meaningful alt text for actual images,
+    and visible focus states.
 
-    Replace <project-name> with a suitable kebab-case project name.
+29. The walkthrough must tell the student exactly which generated files to inspect and edit
+    in Visual Studio Code.
 
-31. Do NOT tell the student to use "mkdir" as the project initialization step. Do NOT tell them to manually create app, src, package.json, tsconfig.json, next.config.mjs, or other standard Next.js files. create-next-app must create the standard project scaffold first.
+30. The deploy section must NOT contain Vercel or cloud deployment. This workshop is local.
 
-32. The generated "build" files are the files the student edits or replaces inside that already-created Next.js project. The response must clearly distinguish the initial scaffold created by create-next-app from the generated custom file contents.
-
-33. The "setup.commands" array must NOT contain a separate "npm install" command because create-next-app with --use-npm installs the dependencies as part of initialization.
-
-34. The "run.commands" array should contain only the commands needed to start the completed project from its project directory, normally:
+31. The run.commands array should normally contain only:
     npm run dev
 
-35. Keep the required generated files compatible with the scaffold created by create-next-app. Use next.config.mjs, not next.config.ts.
+32. Before returning the response, perform a final consistency pass over every generated file:
+    verify paths, imports, client/server boundaries, CSS selectors, package dependencies,
+    Next.js config format, JSON validity, and the scaffold/generated-file compatibility.
 
-
-Return only the structured response matching the provided schema.
+33. Return only the structured response matching the provided schema.
 `;
 
     const response = await ai.models.generateContent({
