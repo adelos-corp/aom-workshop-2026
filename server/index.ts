@@ -298,14 +298,21 @@ IMPORTANT RULES:
 3. Use plain CSS. Do not use Tailwind CSS unless the student explicitly asks for it.
    Keep dependencies minimal.
 
-4. The setup MUST begin from create-next-app. Do not manually construct the project scaffold.
+4. The setup requires Node.js and npm first. If they are not installed, install the current Node.js LTS release, which includes npm. Then use create-next-app. Do not manually construct the project scaffold.
 
-5. The SET UP section MUST contain exactly these commands, in this exact order:
+5. The SET UP section MUST begin by making sure Node.js and npm are installed, because create-next-app and npm require them.
+
+   If Node.js is not installed, instruct the student to install the current Node.js LTS release from the official Node.js website, then verify:
+   node --version
+   npm --version
+
+   After Node.js/npm are available, the project setup commands MUST be exactly:
    npx create-next-app@latest <project-name> --typescript --eslint --app --no-tailwind --no-src-dir --no-agents-md --use-npm
    cd <project-name>
    code .
+
    Do NOT use mkdir.
-   Do NOT add npm install.
+   Do NOT add a separate npm install command.
    create-next-app performs dependency installation.
 
 6. Do NOT use --src-dir. The application MUST have a ROOT-LEVEL app/ directory.
@@ -422,7 +429,9 @@ IMPORTANT RULES:
     verify paths, imports, client/server boundaries, CSS selectors, package dependencies,
     Next.js config format, JSON validity, and the scaffold/generated-file compatibility.
 
-33. Return only the structured response matching the provided schema.
+33. The walkthrough must explain that Node.js includes npm and that Node.js/npm must be installed before running npx or npm commands.
+
+34. Return only the structured response matching the provided schema.
 `;
 
     const response = await ai.models.generateContent({
