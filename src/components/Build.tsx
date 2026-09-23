@@ -80,7 +80,7 @@ export default function Build() {
                       }}
                     />
                     <div>
-                      <div style={{ fontSize: '18px', fontWeight: 500, letterSpacing: '-0.01em', color: 'var(--text)' }}>
+                      <div className={node.label === 'William Graham' ? 'william-graham' : undefined} style={{ fontSize: '18px', fontWeight: 500, letterSpacing: '-0.01em', color: 'var(--text)' }}>
                         {node.label}
                       </div>
                       <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '2px' }}>{node.sub}</div>
@@ -137,7 +137,7 @@ export default function Build() {
                     <span style={{ fontSize: '11px', color: 'var(--muted)', fontVariantNumeric: 'tabular-nums', minWidth: '16px' }}>
                       {String(i + 1).padStart(2, '0')}
                     </span>
-                    <span style={{ fontSize: '15px', color: 'var(--text)', fontWeight: 400, letterSpacing: '-0.01em' }}>
+                    <span className={word === 'William Graham' ? 'william-graham' : undefined} style={{ fontSize: '15px', color: 'var(--text)', fontWeight: 400, letterSpacing: '-0.01em' }}>
                       {word}
                     </span>
                   </div>
