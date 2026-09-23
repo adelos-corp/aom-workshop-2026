@@ -408,3 +408,11 @@ Return only the structured response matching the provided schema.
     });
   }
 }
+
+30. SETUP COMMAND ORDER IS STRICT: The "setup.commands" array must begin with commands that initialize/create the project directory, then "cd" into that directory, then "code ." to open it in Visual Studio Code. Do NOT put "npm install" before "code .". If dependencies are needed, "npm install" may appear only after the directory has been initialized, entered, and opened in VS Code.
+
+31. For a typical Next.js project, prefer a clear sequence such as:
+    mkdir <project-name>
+    cd <project-name>
+    code .
+    Then provide the project files to place in that directory. Do not use create-next-app unless the student's request specifically requires it, because William Graham is generating the project files itself.
