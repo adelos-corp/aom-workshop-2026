@@ -85,6 +85,23 @@ export default function Hero() {
             KES Polytechnic · Second Year / Final Year · 2026
           </motion.div>
 
+          {/* Initiated by */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              fontSize: 'clamp(12px, 1.5vw, 15px)',
+              fontWeight: 500,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: 'var(--muted)',
+              marginBottom: '18px',
+            }}
+          >
+            ADELOS Corp.
+          </motion.div>
+
           {/* Main title */}
           <motion.h1
             initial={{ opacity: 0, y: 28 }}
