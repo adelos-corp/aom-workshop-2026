@@ -116,7 +116,7 @@ export default function Hero() {
               marginBottom: '28px',
             }}
           >
-            The Art of<br />Making
+            Fly
           </motion.h1>
 
           {/* Subline */}
