@@ -125,7 +125,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.34, ease: [0.16, 1, 0.3, 1] }}
             style={{
-              fontSize: 'clamp(11px, 1.4vw, 14px)',
+              fontSize: 'clamp(13px, 1.7vw, 17px)',
               color: 'var(--muted)',
               letterSpacing: '0.02em',
               marginTop: '-8px',
