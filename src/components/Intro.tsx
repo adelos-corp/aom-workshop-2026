@@ -50,7 +50,7 @@ export default function Intro() {
               }}
             >
               In this workshop, students learn to turn ideas into real, working
-              websites — using modern <span className="william-graham">William Graham</span>-assisted development and code. Not by
+              websites — using modern <span className="william-graham">WG</span>-assisted development and code. Not by
               watching. By building.
             </p>
           </FadeUp>
