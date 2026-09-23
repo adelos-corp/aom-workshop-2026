@@ -255,3 +255,9 @@
     animation-duration: 2.4s;
   }
 }
+
+.thought-line__william {
+  font-family: 'Acelon Vintage Demo', 'Acelon Vintage Demo Drawn', serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
