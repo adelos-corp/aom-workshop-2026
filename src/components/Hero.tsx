@@ -82,7 +82,7 @@ export default function Hero() {
                 flexShrink: 0,
               }}
             />
-            KES Polytechnic · Second Year · 2026
+            KES Polytechnic · Second Year / Final Year · 2026
           </motion.div>
 
           {/* Main title */}
