@@ -66,7 +66,7 @@ export default function SecondYear() {
 
             <FadeUp delay={0.2} style={{ marginTop: '32px' }}>
               <p style={{ fontSize: '16px', lineHeight: 1.75, maxWidth: '380px' }}>
-                Students aren't simply asking WG to make a website.
+                Students aren't simply asking <span className="william-graham">William Graham</span> to make a website.
                 They are directing the process — with more control, more
                 experimentation, and more ownership.
               </p>
