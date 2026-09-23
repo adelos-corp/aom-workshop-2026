@@ -4,7 +4,7 @@ import { motion, useInView } from 'motion/react';
 const nodes = [
   { label: 'IDEA', sub: 'the spark' },
   { label: 'PROMPT', sub: 'the instruction' },
-  { label: 'WG', sub: 'the collaborator' },
+  { label: 'William Graham', sub: 'the collaborator' },
   { label: 'CODE', sub: 'the result' },
   { label: 'BROWSER', sub: 'the experience' },
 ];
