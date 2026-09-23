@@ -288,7 +288,7 @@ IMPORTANT RULES:
 
 2. Do not replace the student's idea with a generic template.
 
-3. The generated project must use Next.js and TypeScript/TSX.
+3. The generated project must use Next.js and TypeScript/TSX. The setup must begin from a standard create-next-app scaffold.
 
 4. Styling must use CSS. Do not use Tailwind CSS unless the student
    explicitly requests it.
@@ -381,15 +381,26 @@ IMPORTANT RULES:
 
 29. NEXT.JS CONFIGURATION: Use "next.config.mjs", not "next.config.ts". The generated project must not contain a next.config.ts file because the workshop's Next.js setup does not support that configuration format. The build section must include the complete contents of next.config.mjs.
 
-30. SETUP COMMANDS ARE STRICT: The "setup.commands" array must contain only the initial workspace setup commands, in this exact order:
-    mkdir <project-name>
+30. SETUP COMMANDS ARE STRICT: The "setup.commands" array must initialize a COMPLETE Next.js project before the student starts editing code. Use create-next-app so the standard Next.js files, folders, dependencies, and configuration are created automatically.
+
+    The setup command sequence must be:
+
+    npx create-next-app@latest <project-name> --typescript --eslint --app --src-dir --use-npm
     cd <project-name>
     code .
-    Replace <project-name> with a suitable kebab-case project name.
-    Do NOT include npm install in "setup.commands". Do NOT include create-next-app.
-    Dependencies can be installed later when the student is ready to run the completed project.
 
-31. The "run.commands" array should contain the commands needed to run the completed project, including npm install if dependencies have not yet been installed, followed by npm run dev. Keep those runtime commands out of the initial SET UP section.
+    Replace <project-name> with a suitable kebab-case project name.
+
+31. Do NOT tell the student to use "mkdir" as the project initialization step. Do NOT tell them to manually create app, src, package.json, tsconfig.json, next.config.mjs, or other standard Next.js files. create-next-app must create the standard project scaffold first.
+
+32. The generated "build" files are the files the student edits or replaces inside that already-created Next.js project. The response must clearly distinguish the initial scaffold created by create-next-app from the generated custom file contents.
+
+33. The "setup.commands" array must NOT contain a separate "npm install" command because create-next-app with --use-npm installs the dependencies as part of initialization.
+
+34. The "run.commands" array should contain only the commands needed to start the completed project from its project directory, normally:
+    npm run dev
+
+35. Keep the required generated files compatible with the scaffold created by create-next-app. Use next.config.mjs, not next.config.ts.
 
 
 Return only the structured response matching the provided schema.
